@@ -1,0 +1,50 @@
+{
+  "notes": [
+    {
+      "lane": 0,
+      "hitTime": 0.3,
+      "endTime": 0.3
+    },
+    {
+      "lane": 2,
+      "hitTime": 0.821739,
+      "endTime": 0.821739
+    },
+    {
+      "lane": 1,
+      "hitTime": 1.343478,
+      "endTime": 1.343478
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.865217,
+      "endTime": 3.0
+    },
+    {
+      "lane": 0,
+      "hitTime": 2.386956,
+      "endTime": 2.386956
+    },
+    {
+      "lane": 2,
+      "hitTime": 2.908695,
+      "endTime": 2.908695
+    },
+    {
+      "slideNodes": [
+        {
+          "lane": 1,
+          "time": 3.430434
+        },
+        {
+          "lane": 2,
+          "time": 3.7
+        },
+        {
+          "lane": 3,
+          "time": 3.952173
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - TapNode
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Lane
+    uniqueID: 2393516099
+    locked: 0
+  - name: TapNote
+    uniqueID: 2682362825
+    locked: 0
+  - name: BodyBase
+    uniqueID: 1472287813
+    locked: 0
+  - name: BodyFill
+    uniqueID: 2899691559
+    locked: 0
+  - name: SlidePoint
+    uniqueID: 790150283
+    locked: 0
+  - name: HitArea
+    uniqueID: 3279967997
+    locked: 0
+  - name: UI
+    uniqueID: 3763406783
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []
