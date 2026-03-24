@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HpBar
   maxHP: 100
-  missDamage: 5
+  missDamage: 0
   hpBarFill: {fileID: 584874007}
   hpText: {fileID: 1805045056}
 --- !u!114 &584874007
@@ -3489,7 +3489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   audioSource: {fileID: 1816584058}
-  globalOffset: 0
+  globalOffset: -0.55
 --- !u!4 &1816584060
 Transform:
   m_ObjectHideFlags: 0
