@@ -12,8 +12,8 @@ public class NoteData
 {
     public int lane;
     public float hitTime;
-    public float endTime; // hold note
-
+    public float endTime; // HOLD_With_Ricardo
+    
     public SlideNode[] slideNodes; // slide
 }
 
