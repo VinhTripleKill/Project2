@@ -177,7 +177,8 @@ public class HoldNote : MonoBehaviour
         if (result != "MISS")
         {
             isHolding = true;
-            holdStartTime = songTime; // 🔥 QUAN TRỌNG
+            holdStartTime = startTime;
+            SnapFillToHitLine();
         }
         else
         {
@@ -185,6 +186,16 @@ public class HoldNote : MonoBehaviour
         }
 
         GameManager.Instance.ProcessJudgement(result);
+    }
+    void SnapFillToHitLine()
+    {
+        float songTime = (float)AudioManager.Instance.SongTimeDSP;
+
+        float progress = Mathf.Clamp01((songTime - startTime) / (endTime - startTime));
+
+        float length = totalLength * progress;
+
+        bodyFill.localScale = new Vector3(bodyFill.localScale.x, length, 1f);
     }
 
     public void TryRelease()

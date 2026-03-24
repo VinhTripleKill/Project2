@@ -1515,7 +1515,7 @@ MonoBehaviour:
   - visualLane: {fileID: 1172688453}
   - visualLane: {fileID: 184271348}
   idleAlpha: 0.2
-  pressedAlpha: 1
+  pressedAlpha: 0.3
 --- !u!1 &826027805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,7 +1545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606fe304b509d654486c14ad5c3ebc93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChartManager
-  chartFile: {fileID: 4900000, guid: 099cf520f5d91564eb2e3f51fdff0e00, type: 3}
+  chartFile: {fileID: 4900000, guid: 6add4c948c9a12045affb37305686abb, type: 3}
   tapNotePrefab: {fileID: 1515849207444713372, guid: 0685e52e4e8ad2a4f9c166fbbcbcdb1a, type: 3}
   laneSpawnPoints:
   - {fileID: 1293077020}
@@ -1553,7 +1553,7 @@ MonoBehaviour:
   - {fileID: 463695690}
   - {fileID: 355374817}
   hitLineY: -3.5
-  spawnY: 5.5
+  spawnY: 6
   spawnLeadTime: 2
   holdNotePrefab: {fileID: 4682443108190489439, guid: b48a95e3b4a1f43408370b0f0316ff72, type: 3}
   slideNotePrefab: {fileID: 1870276180566085085, guid: cdb0526aaa6c67b43acc2a91b9ad553d, type: 3}
@@ -1699,7 +1699,7 @@ MonoBehaviour:
   comboCanvasGroup: {fileID: 662406675}
   comboDuration: 0.5
   evaluateDuration: 0.5
-  startCooldown: 1
+  startCooldown: 5
 --- !u!4 &890696183
 Transform:
   m_ObjectHideFlags: 0
@@ -3433,8 +3433,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2040930039}
-  - component: {fileID: 2040930038}
   - component: {fileID: 2040930037}
+  - component: {fileID: 2040930038}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -3455,7 +3455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   audioSource: {fileID: 2040930038}
-  globalOffset: 0
+  globalOffset: -1.2
 --- !u!82 &2040930038
 AudioSource:
   m_ObjectHideFlags: 0
