@@ -61,3 +61,7 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+*.unity binary
+*.prefab binary
+*.asset binary
+*.meta binary
