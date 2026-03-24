@@ -12,8 +12,13 @@ public class NoteData
 {
     public int lane;
     public float hitTime;
+<<<<<<< Updated upstream
     public float endTime; // hold note
 
+=======
+    public float endTime; // HOLD
+    
+>>>>>>> Stashed changes
     public SlideNode[] slideNodes; // slide
 }
 
