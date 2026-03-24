@@ -1,6 +1,16 @@
 {
   "notes": [
     {
+      "lane": 3,
+      "hitTime": 0.5,
+      "endTime": 0.5
+    },
+    {
+      "lane": 0,
+      "hitTime": 9,
+      "endTime": 9
+    },
+    {
       "lane": 0,
       "hitTime": 0.3,
       "endTime": 0.3
@@ -47,8 +57,7 @@
         {
           "lane": 2,
           "time": 8
-        }
-        ,
+        },
         {
           "lane": 0,
           "time": 11

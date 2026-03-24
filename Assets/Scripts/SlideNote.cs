@@ -29,47 +29,73 @@ public class SlideNote : MonoBehaviour
     {
         ResetNodes();
 
+        if (slideNodesData == null || slideNodesData.Length < 2)
+        {
+            Debug.LogWarning("[SlideNote] Invalid slideNodesData (null or < 2)");
+            return;
+        }
+
+        // ✅ COPY để không phá data gốc
+        SlideNode[] sortedNodes = (SlideNode[])slideNodesData.Clone();
+
+        // ✅ SORT theo time
+        System.Array.Sort(sortedNodes, (a, b) => a.time.CompareTo(b.time));
+
+        // ✅ CHECK nếu bị sai thứ tự ban đầu
         for (int i = 0; i < slideNodesData.Length; i++)
         {
-            GameObject prefab;
+            if (slideNodesData[i] != sortedNodes[i])
+            {
+                Debug.LogWarning("[SlideNote] SlideNodes were not sorted. Auto-fixed!");
+                break;
+            }
+        }
 
-            if (i == 0)
-                prefab = startPrefab;
-            else if (i == slideNodesData.Length - 1)
-                prefab = endPrefab;
-            else
-                prefab = checkPrefab;
+        // ===== SPAWN =====
+        for (int i = 0; i < sortedNodes.Length; i++)
+        {
+            SlideNode data = sortedNodes[i];
 
-            Transform spawn = laneSpawnPoints[slideNodesData[i].lane];
             GameObject obj;
-
+            if (data.lane < 0 || data.lane >= laneSpawnPoints.Length)
+            {
+                Debug.LogError($"Invalid lane index: {data.lane}");
+                continue;
+            }
             if (i == 0)
                 obj = ObjectPoolingManager.Instance.GetSlideStart();
-            else if (i == slideNodesData.Length - 1)
+            else if (i == sortedNodes.Length - 1)
                 obj = ObjectPoolingManager.Instance.GetSlideEnd();
             else
                 obj = ObjectPoolingManager.Instance.GetSlideCheck();
+            if (Mathf.Approximately(sortedNodes[i].time, sortedNodes[i - 1].time))
+            {
+                Debug.LogWarning("[SlideNote] Duplicate node time detected!");
+            }
+
+            Transform spawn = laneSpawnPoints[data.lane];
 
             obj.transform.SetParent(transform);
             obj.transform.position = spawn.position;
+
             SlidePoint node = obj.GetComponent<SlidePoint>();
 
             node.Initialize(
-            slideNodesData[i].lane,
-            slideNodesData[i].time,
-            scrollSpeed,hitLineY,this
-             );
+                data.lane,
+                data.time,
+                scrollSpeed,
+                hitLineY,
+                this
+            );
 
             nodes.Add(node);
 
-            if (i == slideNodesData.Length - 1)
+            if (i == sortedNodes.Length - 1)
             {
                 node.isEndPoint = true;
                 endNode = node;
             }
         }
-
-        line.positionCount = nodes.Count;
     }
     void ResetNodes()
     {
@@ -120,4 +146,5 @@ public class SlideNote : MonoBehaviour
             ObjectPoolingManager.Instance.ReturnSlideNote(gameObject);
         }
     }
+
 }

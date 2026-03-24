@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System;
 public class ChartManager : MonoBehaviour
 {
     public TextAsset chartFile;
@@ -24,8 +24,61 @@ public class ChartManager : MonoBehaviour
             return;
         }
 
+        // ✅ VALIDATE TRƯỚC
+        ValidateChart();
+
+        // ✅ SORT NOTE
+        Array.Sort(chartData.notes, CompareNoteTime);
+
         float distance = spawnY - hitLineY;
         scrollSpeed = distance / spawnLeadTime;
+    }
+    void ValidateChart()
+    {
+        foreach (var note in chartData.notes)
+        {
+            // ===== HOLD CHECK =====
+            if (note.endTime > note.hitTime)
+            {
+                // OK hold
+            }
+            else if (note.endTime < note.hitTime)
+            {
+                Debug.LogError($"[Chart ERROR] HoldNote endTime < hitTime | lane={note.lane} | hit={note.hitTime} | end={note.endTime}");
+            }
+
+            // ===== SLIDE CHECK =====
+            if (note.slideNodes != null && note.slideNodes.Length > 1)
+            {
+                for (int i = 0; i < note.slideNodes.Length - 1; i++)
+                {
+                    if (note.slideNodes[i].time > note.slideNodes[i + 1].time)
+                    {
+                        Debug.LogWarning($"[Chart Warning] SlideNodes not ordered at index {i}");
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+    float GetNoteTime(NoteData note)
+    {
+        // Slide → lấy node đầu tiên
+        if (note.slideNodes != null && note.slideNodes.Length > 0)
+        {
+            return note.slideNodes[0].time;
+        }
+
+        // Tap / Hold
+        return note.hitTime;
+    }
+    int CompareNoteTime(NoteData a, NoteData b)
+    {
+        float timeA = GetNoteTime(a);
+        float timeB = GetNoteTime(b);
+
+        return timeA.CompareTo(timeB);
     }
     void Update()
     {
@@ -44,7 +97,7 @@ public class ChartManager : MonoBehaviour
         double songTime = AudioManager.Instance.SongTimeDSP;
 
         while (nextNoteIndex < chartData.notes.Length &&
-               chartData.notes[nextNoteIndex].hitTime - songTime <= spawnLeadTime)
+               GetNoteTime(chartData.notes[nextNoteIndex]) - songTime <= spawnLeadTime)
         {
             SpawnNote(chartData.notes[nextNoteIndex]);
             nextNoteIndex++;
