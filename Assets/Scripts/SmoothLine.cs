@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SmoothLine : MonoBehaviour
 {
     public int minSections = 3;
     public int maxSections = 12;
     public float maxAngle = 90f;
 
-    private LineRenderer line;
+    public float width = 0.5f;
+
+    private Mesh mesh;
     private SlideNote slide;
 
-    // cache
     private List<Vector3> smoothPoints = new List<Vector3>(128);
-    private Vector3[] lineBuffer = new Vector3[128];
 
     void Awake()
     {
-        line = GetComponent<LineRenderer>();
+        mesh = new Mesh();
+        mesh.name = "SlideMesh";
+        GetComponent<MeshFilter>().mesh = mesh;
+
         slide = GetComponent<SlideNote>();
     }
 
@@ -26,22 +29,16 @@ public class SmoothLine : MonoBehaviour
         var nodes = slide.GetNodes();
 
         if (nodes.Count < 2)
-            return;
-
-        GenerateSmoothLine(nodes);
-
-        // expand buffer nếu cần
-        if (lineBuffer.Length < smoothPoints.Count)
         {
-            lineBuffer = new Vector3[smoothPoints.Count];
+            mesh.Clear();
+            return;
         }
 
-        for (int i = 0; i < smoothPoints.Count; i++)
-            lineBuffer[i] = smoothPoints[i];
-
-        line.positionCount = smoothPoints.Count;
-        line.SetPositions(lineBuffer);
+        GenerateSmoothLine(nodes);
+        BuildMesh();
     }
+
+    // ================= SMOOTH =================
 
     void GenerateSmoothLine(List<SlidePoint> nodes)
     {
@@ -85,5 +82,64 @@ public class SmoothLine : MonoBehaviour
             (2f * p0 - 5f * p1 + 4f * p2 - p3) * t * t +
             (-p0 + 3f * p1 - 3f * p2 + p3) * t * t * t
         );
+    }
+
+    // ================= MESH =================
+
+    void BuildMesh()
+    {
+        int pointCount = smoothPoints.Count;
+
+        if (pointCount < 2)
+        {
+            mesh.Clear();
+            return;
+        }
+
+        Vector3[] vertices = new Vector3[pointCount * 2];
+        Vector2[] uvs = new Vector2[vertices.Length];
+        int[] triangles = new int[(pointCount - 1) * 6];
+
+        float halfW = width * 0.5f;
+
+        for (int i = 0; i < pointCount; i++)
+        {
+            Vector3 p = transform.InverseTransformPoint(smoothPoints[i]);
+
+            // 👉 luôn ngang (giống bạn)
+            Vector3 right = Vector3.right * halfW;
+
+            int v = i * 2;
+
+            vertices[v] = p - right;
+            vertices[v + 1] = p + right;
+
+            float t = (float)i / (pointCount - 1);
+
+            uvs[v] = new Vector2(0, t);
+            uvs[v + 1] = new Vector2(1, t);
+        }
+
+        int tri = 0;
+
+        for (int i = 0; i < pointCount - 1; i++)
+        {
+            int v = i * 2;
+
+            triangles[tri++] = v;
+            triangles[tri++] = v + 1;
+            triangles[tri++] = v + 3;
+
+            triangles[tri++] = v + 3;
+            triangles[tri++] = v + 2;
+            triangles[tri++] = v;
+        }
+
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uvs;
+
+        mesh.RecalculateBounds();
     }
 }

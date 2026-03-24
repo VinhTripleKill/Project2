@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 751233237895473616}
   - component: {fileID: 9126490703416663800}
   - component: {fileID: 5056178010339450491}
+  - component: {fileID: 6257428379803822261}
+  - component: {fileID: 7965453649068293060}
   m_Layer: 0
   m_Name: SlideNote
   m_TagString: Untagged
@@ -80,7 +82,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 790150283
+  m_SortingLayerID: 1113772913
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
@@ -182,7 +184,11 @@ MonoBehaviour:
   startPrefab: {fileID: 559810131454306975, guid: 11113dc74aa7e844687d661d7a2b21da, type: 3}
   checkPrefab: {fileID: 4722949396922735340, guid: 0bd8aac1b5614c64cadd6add20318dbc, type: 3}
   endPrefab: {fileID: 4796431190411984998, guid: 1a8b62d01e31b16429eac768d8e5769b, type: 3}
-  laneSpawnPoints: []
+  laneSpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   scrollSpeed: 0
   hitLineY: 0
 --- !u!114 &5056178010339450491
@@ -200,3 +206,61 @@ MonoBehaviour:
   minSections: 3
   maxSections: 12
   maxAngle: 90
+  width: 1.5
+--- !u!33 &6257428379803822261
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870276180566085085}
+  m_Mesh: {fileID: 0}
+--- !u!23 &7965453649068293060
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870276180566085085}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}

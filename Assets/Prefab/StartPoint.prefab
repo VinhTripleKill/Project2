@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4639384169022377699}
   - component: {fileID: 1909913056925562195}
   - component: {fileID: 1037535780244686642}
+  - component: {fileID: -350187206237898026}
   m_Layer: 0
   m_Name: StartPoint
   m_TagString: Untagged
@@ -128,3 +129,26 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &-350187206237898026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559810131454306975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d49f3ed7cf6c7748bc96ca97cc16f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlidePoint
+  laneIndex: 0
+  hitTime: 0
+  scrollSpeed: 0
+  hitLineY: 0
+  isEndPoint: 0
+  despawnY: -9.5
+  parentSlide: {fileID: 0}
+  lockSprite: {fileID: -7476836271290848595, guid: c3aacc2b61be3a346934467922aaea86, type: 3}
+  accurateSprite: {fileID: -3841796150556926904, guid: c3aacc2b61be3a346934467922aaea86, type: 3}
+  missSprite: {fileID: 709225479085357587, guid: c3aacc2b61be3a346934467922aaea86, type: 3}
+  state: 0

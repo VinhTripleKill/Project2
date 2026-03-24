@@ -42,6 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Video_BG
+    uniqueID: 2555265027
+    locked: 0
+  - name: LayoutBG
+    uniqueID: 3216231795
+    locked: 0
   - name: Lane
     uniqueID: 2393516099
     locked: 0
@@ -53,6 +59,9 @@ TagManager:
     locked: 0
   - name: BodyFill
     uniqueID: 2899691559
+    locked: 0
+  - name: LineRenderer
+    uniqueID: 1113772913
     locked: 0
   - name: SlidePoint
     uniqueID: 790150283
