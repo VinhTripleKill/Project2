@@ -12,7 +12,7 @@ public class NoteData
 {
     public int lane;
     public float hitTime;
-    public float endTime; // HOLDgcvyhgsvgvchg
+    public float endTime; // HOLD
     
 
     public SlideNode[] slideNodes; // slide
