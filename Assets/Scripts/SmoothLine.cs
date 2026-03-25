@@ -8,7 +8,7 @@ public class SmoothLine : MonoBehaviour
     public int maxSections = 12;
     public float maxAngle = 90f;
     public float width = 0.5f;
-
+    [SerializeField]private float hitLineY = -3.5f;
     private Mesh mesh;
     private SlideNote slide;
 
@@ -16,18 +16,32 @@ public class SmoothLine : MonoBehaviour
 
     void Awake()
     {
-        mesh = new Mesh();
+        slide = GetComponent<SlideNote>();
+
+        mesh = new Mesh(); // 🔥 QUAN TRỌNG
         mesh.name = "SlideMesh";
         GetComponent<MeshFilter>().mesh = mesh;
 
-        slide = GetComponent<SlideNote>();
-    }
+        var mr = GetComponent<MeshRenderer>();
 
+        Material mat = new Material(Shader.Find("Custom/SlideLineFill"));
+
+        mat.SetColor("_LineColor", Color.cyan);
+        mat.SetColor("_FillColor", new Color(1f, 0f, 1f, 1f));
+        mat.SetFloat("_HitLineY", hitLineY);
+
+        mr.material = mat;
+        mr.sortingLayerName = "LineMesh";
+        mr.sortingOrder = 0;
+    }
     void LateUpdate()
     {
+        if (slide == null)
+            return;
+
         var nodes = slide.GetNodes();
 
-        if (nodes.Count < 2)
+        if (nodes == null || nodes.Count < 2)
         {
             mesh.Clear();
             return;
@@ -36,9 +50,6 @@ public class SmoothLine : MonoBehaviour
         GenerateSmoothLine(nodes);
         BuildMesh();
     }
-
-    // ================= SMOOTH =================
-
     void GenerateSmoothLine(List<SlidePoint> nodes)
     {
         smoothPoints.Clear();

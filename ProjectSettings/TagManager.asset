@@ -60,8 +60,11 @@ TagManager:
   - name: BodyFill
     uniqueID: 2899691559
     locked: 0
-  - name: LineRenderer
+  - name: LineMesh
     uniqueID: 1113772913
+    locked: 0
+  - name: SlideFill
+    uniqueID: 147350507
     locked: 0
   - name: SlidePoint
     uniqueID: 790150283
