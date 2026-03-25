@@ -7,7 +7,6 @@ public class SmoothLine : MonoBehaviour
     public int minSections = 3;
     public int maxSections = 12;
     public float maxAngle = 90f;
-
     public float width = 0.5f;
 
     private Mesh mesh;

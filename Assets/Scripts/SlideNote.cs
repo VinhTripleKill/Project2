@@ -57,21 +57,13 @@ public class SlideNote : MonoBehaviour
             SlideNode data = sortedNodes[i];
 
             GameObject obj;
-            if (data.lane < 0 || data.lane >= laneSpawnPoints.Length)
-            {
-                Debug.LogError($"Invalid lane index: {data.lane}");
-                continue;
-            }
+
             if (i == 0)
                 obj = ObjectPoolingManager.Instance.GetSlideStart();
             else if (i == sortedNodes.Length - 1)
                 obj = ObjectPoolingManager.Instance.GetSlideEnd();
             else
                 obj = ObjectPoolingManager.Instance.GetSlideCheck();
-            if (Mathf.Approximately(sortedNodes[i].time, sortedNodes[i - 1].time))
-            {
-                Debug.LogWarning("[SlideNote] Duplicate node time detected!");
-            }
 
             Transform spawn = laneSpawnPoints[data.lane];
 
