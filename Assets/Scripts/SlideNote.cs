@@ -8,6 +8,7 @@ public class SlideNote : MonoBehaviour
     public GameObject endPrefab;
     private SlidePoint endNode;
     public Transform[] laneSpawnPoints;
+    private SmoothLine smoothLine;
     private List<SlidePoint> nodes = new List<SlidePoint>();
     public List<SlidePoint> GetNodes()
     {
@@ -23,6 +24,7 @@ public class SlideNote : MonoBehaviour
     void Awake()
     {
         line = GetComponent<LineRenderer>();
+        smoothLine = GetComponent<SmoothLine>();    
     }
 
     public void Initialize(SlideNode[] slideNodesData)
@@ -102,22 +104,37 @@ public class SlideNote : MonoBehaviour
     {
         nodes.Clear();
     }
+
     public void NotifyNodeHit(SlidePoint node)
     {
         int index = nodes.IndexOf(node);
 
-        if (index + 1 < nodes.Count)
+        if (index == 0) // 🔥 startPoint được tap
         {
-            SlidePoint next = nodes[index + 1];
-
-            if (next.state == SlidePoint.SlidePointState.Lock)
-                return;
+            if (smoothLine != null)
+            {
+                smoothLine.canFill = true;
+                smoothLine.GetComponent<MeshRenderer>().material.SetFloat("_CanFill", 1f);
+            }
         }
+
+        // node tiếp theo vẫn xử lý như cũ
     }
+
     public void NotifyNodeMiss(SlidePoint node)
     {
         int index = nodes.IndexOf(node);
 
+        if (index == 0) // 🔥 startPoint miss -> block fill
+        {
+            if (smoothLine != null)
+            {
+                smoothLine.canFill = false;
+                smoothLine.GetComponent<MeshRenderer>().material.SetFloat("_CanFill", 0f);
+            }
+        }
+
+        // lock các node tiếp theo
         for (int i = index + 1; i < nodes.Count; i++)
         {
             nodes[i].SetState(SlidePoint.SlidePointState.Lock);

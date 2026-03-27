@@ -92,11 +92,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2885dce2be2cac042a350c002c26afb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SmoothLine
+  slide_BaseS: {r: 1, g: 1, b: 1, a: 1}
+  slide_FillS: {r: 0.6622641, g: 0.9046393, b: 1, a: 1}
   minSections: 3
   maxSections: 12
   maxAngle: 90
   width: 1.5
-  slideMaterial: {fileID: 2100000, guid: eea3e7ab98df0cc48819201d41b4d29f, type: 2}
+  hitLineY: -3.5
 --- !u!33 &6257428379803822261
 MeshFilter:
   m_ObjectHideFlags: 0

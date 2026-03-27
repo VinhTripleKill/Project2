@@ -3,14 +3,16 @@ Shader "Custom/SlideLineFill"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _LineColor ("Line Color", Color) = (0,1,1,1)
-        _FillColor ("Fill Color", Color) = (1,0,1,1)
+        slide_BaseS ("Base Color (Above HitLine)", Color) = (0,1,1,1)
+        slide_FillS ("Fill Color (Below HitLine)", Color) = (1,0,1,1)
         _HitLineY ("Hit Line Y", Float) = -3.5
+        _CanFill ("Can Fill", Float) = 0
     }
 
     SubShader
     {
         Tags { "Queue"="Transparent" "RenderType"="Transparent" }
+
         Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
         Cull Off
@@ -20,7 +22,6 @@ Shader "Custom/SlideLineFill"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
             #include "UnityCG.cginc"
 
             struct appdata
@@ -37,9 +38,10 @@ Shader "Custom/SlideLineFill"
             };
 
             sampler2D _MainTex;
-            float4 _LineColor;
-            float4 _FillColor;
+            float4 slide_BaseS;
+            float4 slide_FillS;
             float _HitLineY;
+            float _CanFill;
 
             v2f vert (appdata v)
             {
@@ -55,11 +57,21 @@ Shader "Custom/SlideLineFill"
 
             fixed4 frag (v2f i) : SV_Target
             {
+                if (_CanFill < 0.5)
+                {
+                    return slide_BaseS;
+                }
+
                 if (i.worldY < _HitLineY)
-                    return _FillColor;
+                {
+                    return slide_FillS;
+                }
                 else
-                    return _LineColor;
+                {
+                    return slide_BaseS;
+                }
             }
+
             ENDCG
         }
     }

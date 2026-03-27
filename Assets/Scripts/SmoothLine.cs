@@ -4,6 +4,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SmoothLine : MonoBehaviour
 {
+    [SerializeField] private Color slide_BaseS = Color.cyan;
+    [SerializeField] private Color slide_FillS = new Color(1f, 0f, 1f, 1f);
     public int minSections = 3;
     public int maxSections = 12;
     public float maxAngle = 90f;
@@ -11,23 +13,24 @@ public class SmoothLine : MonoBehaviour
     [SerializeField]private float hitLineY = -3.5f;
     private Mesh mesh;
     private SlideNote slide;
-
+    [HideInInspector] public bool canFill = false;
     private List<Vector3> smoothPoints = new List<Vector3>(128);
 
     void Awake()
     {
         slide = GetComponent<SlideNote>();
 
-        mesh = new Mesh(); // 🔥 QUAN TRỌNG
+        mesh = new Mesh();
         mesh.name = "SlideMesh";
         GetComponent<MeshFilter>().mesh = mesh;
 
         var mr = GetComponent<MeshRenderer>();
 
         Material mat = new Material(Shader.Find("Custom/SlideLineFill"));
+        mat.SetFloat("_CanFill", canFill ? 1f : 0f);
+        mat.SetColor("slide_BaseS", slide_BaseS);
+        mat.SetColor("slide_FillS", slide_FillS);
 
-        mat.SetColor("_LineColor", Color.cyan);
-        mat.SetColor("_FillColor", new Color(1f, 0f, 1f, 1f));
         mat.SetFloat("_HitLineY", hitLineY);
 
         mr.material = mat;
