@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd4556d62e35b143b9d94e658121859, type: 3}
+  m_Name: Cryp
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Cryptarithm
+  artist: Sakuzyo
+  cover: {fileID: 7747060836690186255, guid: b9ae5405c9c22c445886d8482be04265, type: 3}
+  audio: {fileID: 8300000, guid: 81c4b9045e8ec9242b4eadf2f458120f, type: 3}
+  chart: {fileID: 4900000, guid: d876aa03455f4b5429d8a067c8f782af, type: 3}
+  video: {fileID: 32900000, guid: 582349f49105960458085055caccdcf1, type: 3}

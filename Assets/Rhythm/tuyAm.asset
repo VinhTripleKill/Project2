@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd4556d62e35b143b9d94e658121859, type: 3}
+  m_Name: tuyAm
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Tuy Am
+  artist: Xesi - Masew
+  cover: {fileID: -4364034832326165938, guid: 69637eea7c8361e488b072453de7533f, type: 3}
+  audio: {fileID: 8300000, guid: 38e3ea40de05b8e41859ff4c1c4194ef, type: 3}
+  chart: {fileID: 4900000, guid: 27cbf7b361827364ca02d23dac00d82b, type: 3}
+  video: {fileID: 32900000, guid: a15b11a5041298f49a5f921fa03d98ca, type: 3}
