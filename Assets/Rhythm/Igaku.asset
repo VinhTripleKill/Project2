@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd4556d62e35b143b9d94e658121859, type: 3}
+  m_Name: Igaku
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Igaku
+  artist: 'Sasuke Haraguchi '
+  cover: {fileID: -4272467683537037272, guid: f89b6e2df3bca7a4ab9e714020e951ae, type: 3}
+  audio: {fileID: 8300000, guid: 74a31e921fc412b458934763d23b23e3, type: 3}
+  chart: {fileID: 4900000, guid: 7df61769c1763b0479a0e90b4e373b4e, type: 3}
+  video: {fileID: 32900000, guid: 06cdb7df90635c84f9a729e809a2b0bc, type: 3}
