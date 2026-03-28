@@ -5,45 +5,35 @@ using System.Collections.Generic;
 public class SmoothLine : MonoBehaviour
 {
     [SerializeField] private Color slide_BaseS = Color.cyan;
-    [SerializeField] private Color slide_FillS = new Color(1f, 0f, 1f, 1f);
+
     public int minSections = 3;
     public int maxSections = 12;
     public float maxAngle = 90f;
     public float width = 0.5f;
-    [SerializeField]private float hitLineY = -3.5f;
+
     private Mesh mesh;
     private SlideNote slide;
-    [HideInInspector] public bool canFill = false;
+
     private List<Vector3> smoothPoints = new List<Vector3>(128);
 
     void Awake()
     {
         slide = GetComponent<SlideNote>();
-
         mesh = new Mesh();
         mesh.name = "SlideMesh";
         GetComponent<MeshFilter>().mesh = mesh;
 
         var mr = GetComponent<MeshRenderer>();
 
-        Material mat = new Material(Shader.Find("Custom/SlideLineFill"));
-        mat.SetFloat("_CanFill", canFill ? 1f : 0f);
-        mat.SetColor("slide_BaseS", slide_BaseS);
-        mat.SetColor("slide_FillS", slide_FillS);
-
-        mat.SetFloat("_HitLineY", hitLineY);
-
-        mr.material = mat;
         mr.sortingLayerName = "LineMesh";
         mr.sortingOrder = 0;
     }
+
     void LateUpdate()
     {
-        if (slide == null)
-            return;
+        if (slide == null) return;
 
         var nodes = slide.GetNodes();
-
         if (nodes == null || nodes.Count < 2)
         {
             mesh.Clear();
@@ -53,6 +43,7 @@ public class SmoothLine : MonoBehaviour
         GenerateSmoothLine(nodes);
         BuildMesh();
     }
+
     void GenerateSmoothLine(List<SlidePoint> nodes)
     {
         smoothPoints.Clear();
@@ -80,10 +71,8 @@ public class SmoothLine : MonoBehaviour
     {
         Vector3 dir1 = (p2 - p1).normalized;
         Vector3 dir2 = (p3 - p2).normalized;
-
         float angle = Vector3.Angle(dir1, dir2);
         float t = Mathf.Clamp01(angle / maxAngle);
-
         return Mathf.RoundToInt(Mathf.Lerp(minSections, maxSections, t));
     }
 
@@ -98,11 +87,9 @@ public class SmoothLine : MonoBehaviour
     }
 
     // ================= MESH =================
-
     void BuildMesh()
     {
         int pointCount = smoothPoints.Count;
-
         if (pointCount < 2)
         {
             mesh.Clear();
@@ -118,31 +105,24 @@ public class SmoothLine : MonoBehaviour
         for (int i = 0; i < pointCount; i++)
         {
             Vector3 p = transform.InverseTransformPoint(smoothPoints[i]);
-
-            // 👉 luôn ngang (giống bạn)
             Vector3 right = Vector3.right * halfW;
 
             int v = i * 2;
-
             vertices[v] = p - right;
             vertices[v + 1] = p + right;
 
             float t = (float)i / (pointCount - 1);
-
             uvs[v] = new Vector2(0, t);
             uvs[v + 1] = new Vector2(1, t);
         }
 
         int tri = 0;
-
         for (int i = 0; i < pointCount - 1; i++)
         {
             int v = i * 2;
-
             triangles[tri++] = v;
             triangles[tri++] = v + 1;
             triangles[tri++] = v + 3;
-
             triangles[tri++] = v + 3;
             triangles[tri++] = v + 2;
             triangles[tri++] = v;
@@ -152,7 +132,6 @@ public class SmoothLine : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
-
         mesh.RecalculateBounds();
     }
 }

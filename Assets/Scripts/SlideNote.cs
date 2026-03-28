@@ -6,25 +6,23 @@ public class SlideNote : MonoBehaviour
     public GameObject startPrefab;
     public GameObject checkPrefab;
     public GameObject endPrefab;
+
     private SlidePoint endNode;
     public Transform[] laneSpawnPoints;
+
     private SmoothLine smoothLine;
     private List<SlidePoint> nodes = new List<SlidePoint>();
-    public List<SlidePoint> GetNodes()
-    {
-        return nodes;
-    }
+
+    public List<SlidePoint> GetNodes() { return nodes; }
+
     public float scrollSpeed;
     public float hitLineY;
 
     private int remainingNodes = 0;
 
-    private LineRenderer line;
-
     void Awake()
     {
-        line = GetComponent<LineRenderer>();
-        smoothLine = GetComponent<SmoothLine>();    
+        smoothLine = GetComponent<SmoothLine>();
     }
 
     public void Initialize(SlideNode[] slideNodesData)
@@ -43,23 +41,12 @@ public class SlideNote : MonoBehaviour
         // ✅ SORT theo time
         System.Array.Sort(sortedNodes, (a, b) => a.time.CompareTo(b.time));
 
-        // ✅ CHECK nếu bị sai thứ tự ban đầu
-        for (int i = 0; i < slideNodesData.Length; i++)
-        {
-            if (slideNodesData[i] != sortedNodes[i])
-            {
-                Debug.LogWarning("[SlideNote] SlideNodes were not sorted. Auto-fixed!");
-                break;
-            }
-        }
-
         // ===== SPAWN =====
         for (int i = 0; i < sortedNodes.Length; i++)
         {
             SlideNode data = sortedNodes[i];
 
             GameObject obj;
-
             if (i == 0)
                 obj = ObjectPoolingManager.Instance.GetSlideStart();
             else if (i == sortedNodes.Length - 1)
@@ -68,19 +55,11 @@ public class SlideNote : MonoBehaviour
                 obj = ObjectPoolingManager.Instance.GetSlideCheck();
 
             Transform spawn = laneSpawnPoints[data.lane];
-
             obj.transform.SetParent(transform);
             obj.transform.position = spawn.position;
 
             SlidePoint node = obj.GetComponent<SlidePoint>();
-
-            node.Initialize(
-                data.lane,
-                data.time,
-                scrollSpeed,
-                hitLineY,
-                this
-            );
+            node.Initialize(data.lane, data.time, scrollSpeed, hitLineY, this);
 
             nodes.Add(node);
 
@@ -90,16 +69,19 @@ public class SlideNote : MonoBehaviour
                 endNode = node;
             }
         }
+
+        remainingNodes = nodes.Count;
     }
+
     void ResetNodes()
     {
         foreach (var node in nodes)
         {
             ObjectPoolingManager.Instance.ReturnSlidePoint(node.gameObject, node);
         }
-
         nodes.Clear();
     }
+
     void OnDisable()
     {
         nodes.Clear();
@@ -109,51 +91,41 @@ public class SlideNote : MonoBehaviour
     {
         int index = nodes.IndexOf(node);
 
-        if (index == 0) // 🔥 startPoint được tap
+        // Chỉ xử lý start point (index == 0)
+        if (index == 0)
         {
-            if (smoothLine != null)
-            {
-                smoothLine.canFill = true;
-                smoothLine.GetComponent<MeshRenderer>().material.SetFloat("_CanFill", 1f);
-            }
+            // Không còn fill nữa → không cần làm gì đặc biệt
         }
-
-        // node tiếp theo vẫn xử lý như cũ
     }
 
     public void NotifyNodeMiss(SlidePoint node)
     {
         int index = nodes.IndexOf(node);
 
-        if (index == 0) // 🔥 startPoint miss -> block fill
+        // Chỉ xử lý start point miss
+        if (index == 0)
         {
-            if (smoothLine != null)
-            {
-                smoothLine.canFill = false;
-                smoothLine.GetComponent<MeshRenderer>().material.SetFloat("_CanFill", 0f);
-            }
+            // Không còn fill → không cần set canFill
         }
 
-        // lock các node tiếp theo
+        // Lock các node tiếp theo (vẫn giữ logic này)
         for (int i = index + 1; i < nodes.Count; i++)
         {
             nodes[i].SetState(SlidePoint.SlidePointState.Lock);
         }
     }
+
     public void NotifyEndReached()
     {
         ObjectPoolingManager.Instance.ReturnSlideNote(gameObject);
     }
-    
 
     public void NotifyNodeDestroyed()
     {
         remainingNodes--;
-
         if (remainingNodes <= 0)
         {
             ObjectPoolingManager.Instance.ReturnSlideNote(gameObject);
         }
     }
-
 }
