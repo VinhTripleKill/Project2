@@ -1,4 +1,4 @@
-Shader "Custom/SlideLineFill"
+﻿Shader "Custom/SlideLineFill"
 {
     Properties
     {
@@ -56,21 +56,28 @@ Shader "Custom/SlideLineFill"
             }
 
             fixed4 frag (v2f i) : SV_Target
-            {
-                if (_CanFill < 0.5)
-                {
-                    return slide_BaseS;
-                }
+{
+    if (_CanFill < 0.5)
+    {
+        return slide_BaseS;
+    }
 
-                if (i.worldY < _HitLineY)
-                {
-                    return slide_FillS;
-                }
-                else
-                {
-                    return slide_BaseS;
-                }
-            }
+    // 👉 mask hitline
+    float mask = step(i.worldY, _HitLineY);
+
+    // 👉 fill giả: dùng UV.y (từ đầu -> cuối line)
+    float fill = i.uv.y;
+
+    // 👉 chỉ fill phần dưới hitline + theo hướng line
+    if (mask > 0.5)
+    {
+        return lerp(slide_BaseS, slide_FillS, fill);
+    }
+    else
+    {
+        return slide_BaseS;
+    }
+}
 
             ENDCG
         }
