@@ -52,6 +52,9 @@ public class HoldNote : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.IsGameStarted) return;
+        if (GameManager.Instance.IsPaused) return; // 🔥 THÊM
+        if (GameManager.Instance.IsGameOver) return; 
         Move();
 
         if (AutoPlayManager.Instance != null &&
@@ -64,9 +67,24 @@ public class HoldNote : MonoBehaviour
             CheckAutoMiss();
             CheckOverHoldMiss();
         }
+
         if (isHolding && !finished)
         {
             UpdateFill();
+        }
+    }
+    void LateUpdate()
+    {
+        if (GameManager.Instance.IsPaused) return; // 🔥 THÊM
+        if (GameManager.Instance.IsGameOver) return;
+        float songTime = (float)AudioManager.Instance.SongTimeDSP;
+
+        float tailTime = endTime - songTime;
+        float tailY = hitLineY + tailTime * scrollSpeed;
+
+        if (tailY < despawnY)
+        {
+            ObjectPoolingManager.Instance.ReturnHoldNote(gameObject);
         }
     }
     void FillFull()
@@ -98,18 +116,6 @@ public class HoldNote : MonoBehaviour
         if (isHolding && !finished && songTime >= endTime)
         {
             TryRelease(); // auto PERFECT
-        }
-    }
-    void LateUpdate()
-    {
-        float songTime = (float)AudioManager.Instance.SongTimeDSP;
-
-        float tailTime = endTime - songTime;
-        float tailY = hitLineY + tailTime * scrollSpeed;
-
-        if (tailY < despawnY)
-        {
-            ObjectPoolingManager.Instance.ReturnHoldNote(gameObject);
         }
     }
     void CheckOverHoldMiss()

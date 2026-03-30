@@ -52,6 +52,10 @@ public class SlidePoint : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.IsGameStarted) return;
+        if (GameManager.Instance.IsPaused) return;
+        if (GameManager.Instance.IsGameOver) return; // 🔥
+
         Move();
 
         if (AutoPlayManager.Instance != null &&
@@ -66,6 +70,7 @@ public class SlidePoint : MonoBehaviour
 
         CheckDespawn();
     }
+
     void AutoJudge()
     {
         if (judged || state == SlidePointState.Lock)
@@ -138,6 +143,8 @@ public class SlidePoint : MonoBehaviour
     }
     void CheckDespawn()
     {
+        if (GameManager.Instance.IsPaused) return; // 🔥 THÊM
+
         if (transform.position.y < despawnY)
         {
             if (isEndPoint && parentSlide != null)

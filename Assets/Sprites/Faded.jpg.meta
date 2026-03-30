@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 584b9b94868abc74cbfb606ca2d0a7b4
+guid: a3f88f0d6eea3424db695f2909737921
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2065733144272106913
-    second: Nier_0
+      213: -7475515834653624108
+    second: Faded_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 512
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nier_0
+      name: Faded_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 190
-        height: 150
+        width: 1400
+        height: 1400
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a5f6199955faac10800000000000000
-      internalID: 2065733144272106913
+      spriteID: 4d8b9a294f1a14890800000000000000
+      internalID: -7475515834653624108
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 577a781d02bcdc7459305ec6bf0c4f2b
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Nier_0: 2065733144272106913
+      Faded_0: -7475515834653624108
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

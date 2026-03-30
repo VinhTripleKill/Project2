@@ -83,7 +83,7 @@ public class ChartManager : MonoBehaviour
     void Update()
     {
         if (!GameManager.Instance.IsGameStarted) return; // 🔥 chặn từ đầu
-
+        if (GameManager.Instance.IsGameOver) return;
         if (AudioManager.Instance == null) return;
 
         SpawnNotesByTime();

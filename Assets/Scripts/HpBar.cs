@@ -59,11 +59,6 @@ public class HpBar : MonoBehaviour
     {
         Debug.Log("GAME OVER");
 
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.audioSource.Stop();
-        }
-
-        Time.timeScale = 0f;
+        GameManager.Instance.TriggerGameOver();
     }
 }

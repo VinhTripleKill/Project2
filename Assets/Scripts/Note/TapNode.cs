@@ -40,7 +40,9 @@ public class TapNote : MonoBehaviour
     }
     void Update()
     {
-        if (!GameManager.Instance.IsGameStarted) return; // 🔥 thêm dòng này
+        if (!GameManager.Instance.IsGameStarted) return;
+        if (GameManager.Instance.IsPaused) return;
+        if (GameManager.Instance.IsGameOver) return; // 🔥 THÊM
 
         Move();
 

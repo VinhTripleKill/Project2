@@ -31,6 +31,7 @@ public class InputManager : MonoBehaviour
     {
         input.Enable();
 
+        // Lane (giữ nguyên)
         input.Game.Lane0.started += pressActions[0];
         input.Game.Lane0.canceled += releaseActions[0];
 
@@ -43,7 +44,12 @@ public class InputManager : MonoBehaviour
         input.Game.Lane3.started += pressActions[3];
         input.Game.Lane3.canceled += releaseActions[3];
 
-        
+        // 🔥 PAUSE
+        input.UI.PauseGame.performed += OnPausePressed;
+    }
+    void OnPausePressed(InputAction.CallbackContext ctx)
+    {
+        GameManager.Instance.ToggleStatus();
     }
 
     void OnDisable()
@@ -60,7 +66,7 @@ public class InputManager : MonoBehaviour
         input.Game.Lane3.started -= pressActions[3];
         input.Game.Lane3.canceled -= releaseActions[3];
 
-        
+        input.UI.PauseGame.performed -= OnPausePressed;
 
         input.Disable();
     }
@@ -89,6 +95,9 @@ public class InputManager : MonoBehaviour
 
     bool IsGameplayActive()
     {
-        return AudioManager.Instance != null;
+        return AudioManager.Instance != null
+            && GameManager.Instance != null
+            && GameManager.Instance.IsGameStarted
+            && !GameManager.Instance.IsPaused; // 🔥 THÊM DÒNG NÀY
     }
 }

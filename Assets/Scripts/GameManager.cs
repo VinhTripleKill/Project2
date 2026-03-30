@@ -18,7 +18,23 @@ public class GameManager : MonoBehaviour
     public float evaluateDuration = 0.5f;
     private int score = 0;
     private int combo = 0;
+    [Header("Pause")]
+    public GameObject pauseUI;
+    public GameObject pauseButton;
+    public bool IsGameOver { get; private set; } = false;
 
+    public void TriggerGameOver()
+    {
+        if (IsGameOver) return;
+
+        IsGameOver = true;
+
+        // ❌ Ngừng spawn (bạn sẽ check flag này ở spawner)
+
+        // 🎵 Fade pitch rồi stop
+        StartCoroutine(AudioManager.Instance.FadeOutPitchThenStop(1f));
+    }
+    public bool IsPaused { get; private set; } = false;
     private string lastJudgement = "";
     private int sameTypeCount = 0;
 
@@ -50,6 +66,45 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.PlaySong();
 
         IsGameStarted = true; // 🔥 MỐC DUY NHẤT bắt đầu game
+    }
+    public void ToggleStatus()
+    {
+        if (IsPaused)
+            Resume();
+        else
+            PauseGame();
+    }
+    public void PauseGame()
+    {
+        if (IsPaused) return;
+
+        IsPaused = true;
+
+        // UI
+        pauseUI.SetActive(true);
+        pauseButton.SetActive(false);
+
+        // ⏸ Dừng nhạc
+        AudioManager.Instance.PauseSong();
+
+        // ⏸ Dừng TimeScale (freeze mọi Update)
+        Time.timeScale = 0f;
+    }
+    public void Resume()
+    {
+        if (!IsPaused) return;
+
+        IsPaused = false;
+
+        // UI
+        pauseUI.SetActive(false);
+        pauseButton.SetActive(true);
+
+        // ▶️ chạy lại nhạc (chuẩn DSP)
+        AudioManager.Instance.ResumeSong();
+
+        // ▶️ mở lại game
+        Time.timeScale = 1f;
     }
     public void ProcessJudgement(string judgement)
     {

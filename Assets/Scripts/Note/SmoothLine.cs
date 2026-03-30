@@ -31,6 +31,9 @@ public class SmoothLine : MonoBehaviour
 
     void LateUpdate()
     {
+      
+        if (GameManager.Instance.IsPaused) return;
+        if (GameManager.Instance.IsGameOver) return; // 🔥
         if (slide == null) return;
 
         var nodes = slide.GetNodes();
@@ -43,7 +46,6 @@ public class SmoothLine : MonoBehaviour
         GenerateSmoothLine(nodes);
         BuildMesh();
     }
-
     void GenerateSmoothLine(List<SlidePoint> nodes)
     {
         smoothPoints.Clear();
