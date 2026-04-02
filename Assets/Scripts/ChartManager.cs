@@ -13,7 +13,15 @@ public class ChartManager : MonoBehaviour
     private int nextNoteIndex = 0;
     public GameObject slideNotePrefab;
     private float scrollSpeed;
-
+    private float baseScrollSpeed;
+    private float speedMultiplier = 1f;
+    public static ChartManager Instance;
+    private float targetSpeed;
+    public float CurrentScrollSpeed => scrollSpeed;
+    void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         chartData = JsonUtility.FromJson<ChartData>(chartFile.text);
@@ -31,8 +39,16 @@ public class ChartManager : MonoBehaviour
         Array.Sort(chartData.notes, CompareNoteTime);
 
         float distance = spawnY - hitLineY;
-        scrollSpeed = distance / spawnLeadTime;
+        baseScrollSpeed = distance / spawnLeadTime;
+
+        scrollSpeed = baseScrollSpeed;
     }
+    public void SetSpeed(float speed)
+    {
+        speedMultiplier = speed;
+        targetSpeed = baseScrollSpeed * speedMultiplier;
+    }
+
     void ValidateChart()
     {
         foreach (var note in chartData.notes)
@@ -85,7 +101,7 @@ public class ChartManager : MonoBehaviour
         if (!GameManager.Instance.IsGameStarted) return; // 🔥 chặn từ đầu
         if (GameManager.Instance.IsGameOver) return;
         if (AudioManager.Instance == null) return;
-
+        scrollSpeed = Mathf.Lerp(scrollSpeed, targetSpeed, Time.deltaTime * 10f);
         SpawnNotesByTime();
     }
 
@@ -127,7 +143,7 @@ public class ChartManager : MonoBehaviour
             GameObject obj = ObjectPoolingManager.Instance.GetTapNote();
             obj.transform.position = spawn.position;
             TapNote tap = obj.GetComponent<TapNote>();
-            tap.Initialize(noteData.lane, noteData.hitTime, scrollSpeed, hitLineY);
+            tap.Initialize(noteData.lane, noteData.hitTime, hitLineY);
         }
 
         // HOLD
@@ -138,7 +154,7 @@ public class ChartManager : MonoBehaviour
             obj.transform.position = spawn.position;
             HoldNote hold = obj.GetComponent<HoldNote>();
 
-            hold.Initialize(noteData.lane, noteData.hitTime, noteData.endTime, scrollSpeed, hitLineY);
+            hold.Initialize(noteData.lane, noteData.hitTime, noteData.endTime, hitLineY);
         }
     }
     

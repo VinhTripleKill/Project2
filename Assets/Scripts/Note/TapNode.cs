@@ -7,7 +7,7 @@ public class TapNote : MonoBehaviour
     public float hitTime;
     private SpriteRenderer sr;
     [Header("Movement")]
-    public float scrollSpeed;
+
     public float hitLineY = -3.5f;
     public float despawnY = -6.5f;   // khi ra khỏi màn hình
 
@@ -18,11 +18,10 @@ public class TapNote : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
     }
-    public void Initialize(int lane, float hit, float speed, float lineY)
+    public void Initialize(int lane, float hit,  float lineY)
     {
         laneIndex = lane;
         hitTime = hit;
-        scrollSpeed = speed;
         hitLineY = lineY;
 
         judged = false;
@@ -74,7 +73,10 @@ public class TapNote : MonoBehaviour
     {
         float songTime = (float)AudioManager.Instance.SongTimeDSP;
         float timeUntilHit = hitTime - songTime;
-        float y = hitLineY + timeUntilHit * scrollSpeed;
+
+        float currentSpeed = ChartManager.Instance.CurrentScrollSpeed;
+
+        float y = hitLineY + timeUntilHit * currentSpeed;
 
         transform.position = new Vector3(spawnX, y, 0f);
     }

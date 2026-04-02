@@ -3,7 +3,7 @@ using System.Collections;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-
+    private float speedMultiplier = 1f;
     public AudioSource audioSource;
     public float globalOffset = 0f;
     private double pauseDSPTime;
@@ -11,22 +11,22 @@ public class AudioManager : MonoBehaviour
     private bool isPlaying = false;
     private double pausedSongTime; // 🔥 THÊM
 
-    public double SongTimeDSP
-    {
-        get
-        {
-            if (!isPlaying)
-                return pausedSongTime; // 🔥 giữ nguyên thời gian khi pause
-
-            return (AudioSettings.dspTime - songStartDSPTime) + globalOffset;
-        }
-    }
 
     void Awake()
     {
         Instance = this;
 
         audioSource.Stop(); // 🔥 đảm bảo không auto play
+    }
+    public double SongTimeDSP
+    {
+        get
+        {
+            if (!isPlaying)
+                return pausedSongTime;
+
+            return (AudioSettings.dspTime - songStartDSPTime) + globalOffset;
+        }
     }
 
     public void PlaySong()

@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,22 +23,23 @@ public class GameManager : MonoBehaviour
     public GameObject pauseUI;
     public GameObject pauseButton;
     public bool IsGameOver { get; private set; } = false;
+    [Header("Speed")]
+    public Button increSpeedButton;
+    public Button decreSpeedButton;
+    public Scrollbar speedScrollbar;
+    public TextMeshProUGUI speed_Text;
+    private bool isUpdatingScrollbar = false;
+    private float speed = 1f;
+    public float SpeedMultiplier { get; private set; } = 1f;
 
-    public void TriggerGameOver()
-    {
-        if (IsGameOver) return;
-
-        IsGameOver = true;
-
-        // ❌ Ngừng spawn (bạn sẽ check flag này ở spawner)
-
-        // 🎵 Fade pitch rồi stop
-        StartCoroutine(AudioManager.Instance.FadeOutPitchThenStop(1f));
-    }
     public bool IsPaused { get; private set; } = false;
     private string lastJudgement = "";
     private int sameTypeCount = 0;
-
+    private float snapThreshold = 0.03f; // khoảng hút (có thể chỉnh)
+    private float[] snapPoints = new float[]
+    {
+    0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f
+    };
     private Coroutine evaluateFadeRoutine;
     private Coroutine comboFadeRoutine;
     [Header("Start")]
@@ -57,7 +59,76 @@ public class GameManager : MonoBehaviour
         comboCanvasGroup.alpha = 0;
         evaluateCanvasGroup.alpha = 0;
 
+        speed = 1f;
+        ApplySpeed();
+
+        increSpeedButton.onClick.AddListener(IncreaseSpeed);
+        decreSpeedButton.onClick.AddListener(DecreaseSpeed);
+        speedScrollbar.onValueChanged.AddListener(OnScrollbarChanged);
         UpdateUI();
+    }
+    void OnScrollbarChanged(float value)
+    {
+        if (isUpdatingScrollbar) return;
+
+        float rawSpeed = Mathf.Lerp(0.5f, 2f, value);
+
+        // 🎯 làm tròn 0.01 (mượt)
+        float smoothSpeed = Mathf.Round(rawSpeed * 100f) / 100f;
+
+        // 🎯 SNAP
+        float snapped = GetSnappedSpeed(smoothSpeed);
+
+        speed = snapped;
+
+        ApplySpeed();
+    }
+    float GetSnappedSpeed(float input)
+    {
+        foreach (float point in snapPoints)
+        {
+            if (Mathf.Abs(input - point) <= snapThreshold)
+            {
+                return point; // 🎯 hút vào mốc
+            }
+        }
+
+        return input; // 🎯 giữ mượt
+    }
+    public void TriggerGameOver()
+    {
+        if (IsGameOver) return;
+
+        IsGameOver = true;
+        StartCoroutine(AudioManager.Instance.FadeOutPitchThenStop(1f));
+    }
+    void IncreaseSpeed()
+    {
+        speed += 0.25f;
+        speed = Mathf.Clamp(speed, 0.5f, 2f);
+
+        ApplySpeed();
+    }
+
+    void DecreaseSpeed()
+    {
+        speed -= 0.25f;
+        speed = Mathf.Clamp(speed, 0.5f, 2f);
+
+        ApplySpeed();
+    }
+    void ApplySpeed()
+    {
+        SpeedMultiplier = speed;
+
+        speed_Text.text = "x" + speed.ToString("0.##");
+
+        float normalized = (speed - 0.5f) / (2f - 0.5f);
+
+        // ❌ không dùng value =
+        speedScrollbar.SetValueWithoutNotify(normalized);
+
+        ChartManager.Instance.SetSpeed(SpeedMultiplier);
     }
     IEnumerator StartGameRoutine()
     {

@@ -12,11 +12,9 @@ public class LaneManager : MonoBehaviour
 
     public Lane[] lanes;
 
-    [Range(0f, 1f)]
-    public float idleAlpha = 0.2f;
-
-    [Range(0f, 1f)]
-    public float pressedAlpha = 1f;
+    [Header("Color Settings")]
+    public Color idleColor = Color.white;        // màu bình thường
+    public Color interactive;                    // màu khi nhấn
 
     void Awake()
     {
@@ -32,7 +30,7 @@ public class LaneManager : MonoBehaviour
     {
         for (int i = 0; i < lanes.Length; i++)
         {
-            SetAlpha(lanes[i].visualLane, idleAlpha);
+            SetColor(lanes[i].visualLane, idleColor);
         }
     }
 
@@ -40,20 +38,18 @@ public class LaneManager : MonoBehaviour
     {
         if (lane < 0 || lane >= lanes.Length) return;
 
-        SetAlpha(lanes[lane].visualLane, pressedAlpha);
+        SetColor(lanes[lane].visualLane, interactive);
     }
 
     public void ReleaseLane(int lane)
     {
         if (lane < 0 || lane >= lanes.Length) return;
 
-        SetAlpha(lanes[lane].visualLane, idleAlpha);
+        SetColor(lanes[lane].visualLane, idleColor);
     }
 
-    void SetAlpha(SpriteRenderer sr, float alpha)
+    void SetColor(SpriteRenderer sr, Color color)
     {
-        Color c = sr.color;
-        c.a = alpha;
-        sr.color = c;
+        sr.color = color;
     }
 }
