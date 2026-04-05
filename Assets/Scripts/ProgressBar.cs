@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField] private Image progressBar;
-
+    private bool[] previousCollected; // 🔥 star từ lần trước
     [Header("Star Points")]
     [SerializeField] private Image starPointPrefab;
     [SerializeField] private RectTransform starParent;
     private bool[] starCollected;
     private float songLength;
-
+    private int currentRunStarCount = 0;
     private List<Image> starPoints = new List<Image>();
     private float[] starPercents = new float[] { 0.3334f, 0.6667f, 1f };
 
@@ -21,31 +21,21 @@ public class ProgressBar : MonoBehaviour
         {
             songLength = AudioManager.Instance.audioSource.clip.length;
         }
+
         starCollected = new bool[starPercents.Length];
+
+        // 🔥 LOAD DATA CŨ
+        if (StarSaveData.hasData)
+        {
+            previousCollected = (bool[])StarSaveData.collected.Clone();
+        }
+        else
+        {
+            previousCollected = new bool[starPercents.Length];
+        }
+
         SpawnStarPoints();
     }
-
-    void SpawnStarPoints()
-    {
-        RectTransform barRect = progressBar.GetComponent<RectTransform>();
-
-        foreach (float percent in starPercents)
-        {
-            Image star = Instantiate(starPointPrefab, starParent);
-
-            RectTransform rt = star.GetComponent<RectTransform>();
-
-            // anchor theo thanh progress
-            rt.anchorMin = new Vector2(percent, 0.5f);
-            rt.anchorMax = new Vector2(percent, 0.5f);
-            rt.anchoredPosition = Vector2.zero;
-
-            SetStarValue(star, 0f); // ban đầu tối
-
-            starPoints.Add(star);
-        }
-    }
-
     void Update()
     {
         if (!GameManager.Instance.IsGameStarted) return;
@@ -63,21 +53,32 @@ public class ProgressBar : MonoBehaviour
         UpdateStars(progress);
     }
 
-    void UpdateStars(float progress)
+    void SpawnStarPoints()
+    {
+        foreach (float percent in starPercents)
+        {
+            Image star = Instantiate(starPointPrefab, starParent);
+
+            RectTransform rt = star.GetComponent<RectTransform>();
+
+            rt.anchorMin = new Vector2(percent, 0.5f);
+            rt.anchorMax = new Vector2(percent, 0.5f);
+            rt.anchoredPosition = Vector2.zero;
+
+            starPoints.Add(star);
+        }
+
+        // 🔥 APPLY trạng thái ban đầu
+        ApplyInitialStarState();
+    }
+    void ApplyInitialStarState()
     {
         for (int i = 0; i < starPoints.Count; i++)
         {
-            // ⭐ ĐÃ CHẠM MỐC
-            if (progress >= starPercents[i])
+            if (previousCollected[i])
             {
-                SetStarValue(starPoints[i], 1f);
-
-                // 🔥 trigger 1 lần duy nhất
-                if (!starCollected[i])
-                {
-                    starCollected[i] = true;
-                    Debug.Log($"StarPoint {i + 1} have collected");
-                }
+                // ⭐ đã từng đạt → 50%
+                SetStarValue(starPoints[i], 0.5f);
             }
             else
             {
@@ -85,6 +86,40 @@ public class ProgressBar : MonoBehaviour
             }
         }
     }
+
+    public bool[] GetCurrentStars()
+    {
+        return (bool[])starCollected.Clone();
+    }
+    void UpdateStars(float progress)
+    {
+        for (int i = 0; i < starPoints.Count; i++)
+        {
+            if (progress >= starPercents[i])
+            {
+                // 🔥 nếu đã trigger rồi thì bỏ qua
+                if (starCollected[i]) continue;
+
+                starCollected[i] = true;
+
+                // ===== CASE 1: đã thu thập từ trước =====
+                if (previousCollected[i])
+                {
+                    SetStarValue(starPoints[i], 0.5f);
+                    Debug.Log("⭐ Star này bạn đã thu thập rồi");
+                }
+                else
+                {
+                    // ===== CASE 2: star mới =====
+                    currentRunStarCount++;
+
+                    SetStarValue(starPoints[i], 1f);
+                    Debug.Log($"✨ Bạn đã thu thập {currentRunStarCount} star");
+                }
+            }
+        }
+    }
+
     void SetStarValue(Image star, float value)
     {
         Color c = star.color;

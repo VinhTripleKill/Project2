@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd4556d62e35b143b9d94e658121859, type: 3}
+  m_Name: New Song Data
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: nah
+  artist: koko
+  cover: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  audio: {fileID: 8300000, guid: c76148bb4ff66ca45a672f746a228217, type: 3}
+  chart: {fileID: 4900000, guid: 0adcc2a372104184ea88d4d122d9e0de, type: 3}
+  video: {fileID: 32900000, guid: 97a073f850219b241be5eadcc280f4fd, type: 3}

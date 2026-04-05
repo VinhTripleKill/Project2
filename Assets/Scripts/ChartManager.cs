@@ -18,6 +18,8 @@ public class ChartManager : MonoBehaviour
     public static ChartManager Instance;
     private float targetSpeed;
     public float CurrentScrollSpeed => scrollSpeed;
+    private bool stopSpawn = false;
+    private bool notifiedEnd = false;
     void Awake()
     {
         Instance = this;
@@ -42,6 +44,41 @@ public class ChartManager : MonoBehaviour
         baseScrollSpeed = distance / spawnLeadTime;
 
         scrollSpeed = baseScrollSpeed;
+    }
+    void Update()
+    {
+        if (!GameManager.Instance.IsGameStarted) return;
+        if (GameManager.Instance.IsGameOver) return;
+        if (AudioManager.Instance == null) return;
+
+        scrollSpeed = Mathf.Lerp(scrollSpeed, targetSpeed, Time.deltaTime * 10f);
+
+        // ❌ đã stop spawn thì không spawn nữa
+        if (stopSpawn) return;
+
+        // 🔥 CHECK END SONG
+        if (IsSongFinished())
+        {
+            stopSpawn = true;
+
+            if (!notifiedEnd)
+            {
+                notifiedEnd = true;
+                GameManager.Instance.OnSongFinished();
+            }
+            return;
+        }
+
+        SpawnNotesByTime();
+    }
+    bool IsSongFinished()
+    {
+        if (AudioManager.Instance == null) return false;
+
+        float length = AudioManager.Instance.audioSource.clip.length;
+        double time = AudioManager.Instance.SongTimeDSP;
+
+        return time >= length;
     }
     public void SetSpeed(float speed)
     {
@@ -95,14 +132,6 @@ public class ChartManager : MonoBehaviour
         float timeB = GetNoteTime(b);
 
         return timeA.CompareTo(timeB);
-    }
-    void Update()
-    {
-        if (!GameManager.Instance.IsGameStarted) return; // 🔥 chặn từ đầu
-        if (GameManager.Instance.IsGameOver) return;
-        if (AudioManager.Instance == null) return;
-        scrollSpeed = Mathf.Lerp(scrollSpeed, targetSpeed, Time.deltaTime * 10f);
-        SpawnNotesByTime();
     }
 
     void SpawnNotesByTime()

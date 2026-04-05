@@ -16,7 +16,7 @@ public class HoldNote : MonoBehaviour
     private bool headJudged = false;
     private bool isHolding = false;
     private bool finished = false;
-    private bool headMissed = false;
+
     public float despawnY = -9.5f;
 
     public void Initialize(int lane, float start, float end, float hitY)
@@ -206,7 +206,8 @@ public class HoldNote : MonoBehaviour
         if (!headJudged && songTime - startTime > 0.3f)
         {
             headJudged = true;
-            headMissed = true;
+           
+
 
             GameManager.Instance.ProcessJudgement("MISS");
         }

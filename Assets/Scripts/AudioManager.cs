@@ -3,7 +3,6 @@ using System.Collections;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    private float speedMultiplier = 1f;
     public AudioSource audioSource;
     public float globalOffset = 0f;
     private double pauseDSPTime;

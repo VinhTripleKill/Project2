@@ -5,11 +5,20 @@ using System.Collections;
 
 public class AvatarBackgroundManager : MonoBehaviour
 {
+    public enum BG_Mode
+    {
+        Image,
+        Video
+    }
+
+    [Header("Mode")]
+    public BG_Mode mode = BG_Mode.Video;
+
     public Image avatarImage;
 
     [Header("BG")]
-    public Image backgroundImage;   // ảnh avatar
-    public RawImage videoRawImage;  // video
+    public Image backgroundImage;
+    public RawImage videoRawImage;
     public VideoPlayer videoPlayer;
 
     [Header("Fade")]
@@ -17,6 +26,7 @@ public class AvatarBackgroundManager : MonoBehaviour
 
     private bool startedVideo = false;
     private bool endedVideo = false;
+    private bool videoReady = false;
 
     private Coroutine fadeRoutine;
 
@@ -28,30 +38,53 @@ public class AvatarBackgroundManager : MonoBehaviour
             backgroundImage.sprite = avatarImage.sprite;
         }
 
+        // ===== MODE IMAGE =====
+        if (mode == BG_Mode.Image)
+        {
+            backgroundImage.enabled = true;
+            videoRawImage.enabled = false;
+            videoPlayer.gameObject.SetActive(false);
+            return;
+        }
+
+        // ===== MODE VIDEO =====
         SetAlpha(backgroundImage, 1f);
         SetAlpha(videoRawImage, 0f);
 
-        videoPlayer.Stop();
+        videoRawImage.enabled = false;
+
+        // 🔥 QUAN TRỌNG: prepare trước video
+        videoPlayer.playOnAwake = false;
+        videoPlayer.isLooping = false;
+        videoPlayer.Prepare();
+        videoPlayer.prepareCompleted += OnVideoPrepared;
+    }
+
+    void OnVideoPrepared(VideoPlayer vp)
+    {
+        videoReady = true;
+
+        // gán texture ngay để tránh frame xanh
+        videoRawImage.texture = vp.texture;
     }
 
     void Update()
     {
+        if (mode == BG_Mode.Image) return;
+
         if (GameManager.Instance == null) return;
 
-        // ===== CHƯA START =====
         if (!GameManager.Instance.IsGameStarted)
-        {
             return;
-        }
 
-        // ===== START VIDEO (fade vào) =====
-        if (!startedVideo)
+        // ===== START VIDEO =====
+        if (!startedVideo && videoReady)
         {
             StartVideoWithFade();
         }
 
         // ===== PAUSE =====
-        if (GameManager.Instance.IsPaused||GameManager.Instance.IsGameOver)
+        if (GameManager.Instance.IsPaused || GameManager.Instance.IsGameOver)
         {
             if (videoPlayer.isPlaying)
                 videoPlayer.Pause();
@@ -62,7 +95,7 @@ public class AvatarBackgroundManager : MonoBehaviour
                 videoPlayer.Play();
         }
 
-        // ===== KẾT THÚC NHẠC → FADE NGƯỢC =====
+        // ===== END =====
         if (!endedVideo && IsSongFinished())
         {
             EndVideoWithFade();
@@ -70,21 +103,18 @@ public class AvatarBackgroundManager : MonoBehaviour
     }
 
     // =========================
-    // 🎬 START VIDEO (fade in)
-    // =========================
     void StartVideoWithFade()
     {
         startedVideo = true;
 
         videoRawImage.enabled = true;
+
+        // 🔥 đảm bảo đã có frame trước khi play
         videoPlayer.Play();
 
         StartFade(backgroundImage, videoRawImage);
     }
 
-    // =========================
-    // 🎬 END VIDEO (fade out)
-    // =========================
     void EndVideoWithFade()
     {
         endedVideo = true;
@@ -92,8 +122,6 @@ public class AvatarBackgroundManager : MonoBehaviour
         StartFade(videoRawImage, backgroundImage);
     }
 
-    // =========================
-    // 🎨 FADE CORE
     // =========================
     void StartFade(Graphic from, Graphic to)
     {
@@ -106,6 +134,10 @@ public class AvatarBackgroundManager : MonoBehaviour
     IEnumerator FadeRoutine(Graphic from, Graphic to)
     {
         float time = 0f;
+
+        // 🔥 đảm bảo object đang bật
+        from.enabled = true;
+        to.enabled = true;
 
         while (time < fadeDuration)
         {
@@ -121,7 +153,6 @@ public class AvatarBackgroundManager : MonoBehaviour
         SetAlpha(from, 0f);
         SetAlpha(to, 1f);
 
-        // tắt hẳn cái bị fade out
         from.enabled = false;
     }
 
@@ -132,13 +163,8 @@ public class AvatarBackgroundManager : MonoBehaviour
         Color c = g.color;
         c.a = a;
         g.color = c;
-
-        if (!g.enabled) g.enabled = true;
     }
 
-    // =========================
-    // 🎵 CHECK END NHẠC
-    // =========================
     bool IsSongFinished()
     {
         if (AudioManager.Instance == null) return false;

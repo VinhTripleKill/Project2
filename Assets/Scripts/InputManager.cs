@@ -98,6 +98,6 @@ public class InputManager : MonoBehaviour
         return AudioManager.Instance != null
             && GameManager.Instance != null
             && GameManager.Instance.IsGameStarted
-            && !GameManager.Instance.IsPaused; // 🔥 THÊM DÒNG NÀY
+            && !GameManager.Instance.IsPaused; 
     }
 }

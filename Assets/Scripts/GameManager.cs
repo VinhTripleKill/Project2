@@ -6,8 +6,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private ProgressBar progressBar;
     public static GameManager Instance;
-   
+    [Header("Result")]
+    public GameObject resultGame;
+    [Header("Result Setting")]
+    [SerializeField] private float cooldownByLose = 2f;
+    [SerializeField] private float cooldownByWin = 5f;
     [Header("UI")]
     public TextMeshProUGUI evaluateText;
     public TextMeshProUGUI scoreText;
@@ -15,36 +20,35 @@ public class GameManager : MonoBehaviour
 
     public CanvasGroup evaluateCanvasGroup;
     public CanvasGroup comboCanvasGroup;
+
     public float comboDuration = 0.5f;
     public float evaluateDuration = 0.5f;
+
     private int score = 0;
     private int combo = 0;
+
     [Header("Pause")]
     public GameObject pauseUI;
     public GameObject pauseButton;
-    public bool IsGameOver { get; private set; } = false;
-    [Header("Speed")]
-    public Button increSpeedButton;
-    public Button decreSpeedButton;
-    public Scrollbar speedScrollbar;
-    public TextMeshProUGUI speed_Text;
-    private bool isUpdatingScrollbar = false;
-    private float speed = 1f;
-    public float SpeedMultiplier { get; private set; } = 1f;
 
+    public bool IsGameOver { get; private set; } = false;
     public bool IsPaused { get; private set; } = false;
+
     private string lastJudgement = "";
     private int sameTypeCount = 0;
-    private float snapThreshold = 0.03f; // khoảng hút (có thể chỉnh)
-    private float[] snapPoints = new float[]
-    {
-    0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f
-    };
+
     private Coroutine evaluateFadeRoutine;
     private Coroutine comboFadeRoutine;
+
     [Header("Start")]
     public float startCooldown = 1.0f;
     public bool IsGameStarted { get; private set; } = false;
+
+    // Speed
+    private float speed = 1f;
+    public float SpeedMultiplier { get; private set; } = 1f;
+
+
     void Awake()
     {
         Instance = this;
@@ -52,92 +56,55 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(StartGameRoutine());
-
+        // Khởi tạo UI
         evaluateText.text = "";
         comboText.text = "";
         comboCanvasGroup.alpha = 0;
         evaluateCanvasGroup.alpha = 0;
 
+        // Khởi tạo tốc độ mặc định
         speed = 1f;
-        ApplySpeed();
+        SetSpeed(1f);
 
-        increSpeedButton.onClick.AddListener(IncreaseSpeed);
-        decreSpeedButton.onClick.AddListener(DecreaseSpeed);
-        speedScrollbar.onValueChanged.AddListener(OnScrollbarChanged);
-        UpdateUI();
+        StartCoroutine(StartGameRoutine());
     }
-    void OnScrollbarChanged(float value)
+
+    public void SetSpeed(float newSpeed)
     {
-        if (isUpdatingScrollbar) return;
+        speed = Mathf.Clamp(newSpeed, 0.5f, 2f);
+        SpeedMultiplier = speed;
 
-        float rawSpeed = Mathf.Lerp(0.5f, 2f, value);
-
-        // 🎯 làm tròn 0.01 (mượt)
-        float smoothSpeed = Mathf.Round(rawSpeed * 100f) / 100f;
-
-        // 🎯 SNAP
-        float snapped = GetSnappedSpeed(smoothSpeed);
-
-        speed = snapped;
-
-        ApplySpeed();
+        if (ChartManager.Instance != null)
+            ChartManager.Instance.SetSpeed(SpeedMultiplier);
     }
-    float GetSnappedSpeed(float input)
-    {
-        foreach (float point in snapPoints)
-        {
-            if (Mathf.Abs(input - point) <= snapThreshold)
-            {
-                return point; // 🎯 hút vào mốc
-            }
-        }
 
-        return input; // 🎯 giữ mượt
+    IEnumerator ShowResultAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+
+        resultGame.SetActive(true);
     }
     public void TriggerGameOver()
     {
         if (IsGameOver) return;
 
         IsGameOver = true;
+
+        // 🔥 SAVE STAR TRƯỚC KHI REPLAY
+        StarSaveData.Save(progressBar.GetCurrentStars());
+
         StartCoroutine(AudioManager.Instance.FadeOutPitchThenStop(1f));
-    }
-    void IncreaseSpeed()
-    {
-        speed += 0.25f;
-        speed = Mathf.Clamp(speed, 0.5f, 2f);
-
-        ApplySpeed();
+        StartCoroutine(ShowResultAfterDelay(cooldownByLose));
     }
 
-    void DecreaseSpeed()
-    {
-        speed -= 0.25f;
-        speed = Mathf.Clamp(speed, 0.5f, 2f);
-
-        ApplySpeed();
-    }
-    void ApplySpeed()
-    {
-        SpeedMultiplier = speed;
-
-        speed_Text.text = "x" + speed.ToString("0.##");
-
-        float normalized = (speed - 0.5f) / (2f - 0.5f);
-
-        // ❌ không dùng value =
-        speedScrollbar.SetValueWithoutNotify(normalized);
-
-        ChartManager.Instance.SetSpeed(SpeedMultiplier);
-    }
     IEnumerator StartGameRoutine()
     {
         yield return new WaitForSeconds(startCooldown);
 
         AudioManager.Instance.PlaySong();
-
-        IsGameStarted = true; // 🔥 MỐC DUY NHẤT bắt đầu game
+        IsGameStarted = true;
     }
+
     public void ToggleStatus()
     {
         if (IsPaused)
@@ -145,38 +112,36 @@ public class GameManager : MonoBehaviour
         else
             PauseGame();
     }
+
     public void PauseGame()
     {
         if (IsPaused) return;
 
         IsPaused = true;
 
-        // UI
         pauseUI.SetActive(true);
         pauseButton.SetActive(false);
 
-        // ⏸ Dừng nhạc
-        AudioManager.Instance.PauseSong();
+        // Set default tab khi mở Pause
+        PauseUI.Instance.InitDefault();
 
-        // ⏸ Dừng TimeScale (freeze mọi Update)
+        AudioManager.Instance.PauseSong();
         Time.timeScale = 0f;
     }
+
     public void Resume()
     {
         if (!IsPaused) return;
 
         IsPaused = false;
 
-        // UI
         pauseUI.SetActive(false);
         pauseButton.SetActive(true);
 
-        // ▶️ chạy lại nhạc (chuẩn DSP)
         AudioManager.Instance.ResumeSong();
-
-        // ▶️ mở lại game
         Time.timeScale = 1f;
     }
+
     public void ProcessJudgement(string judgement)
     {
         int addScore = 0;
@@ -194,7 +159,7 @@ public class GameManager : MonoBehaviour
 
         score += addScore;
 
-        // ===== COMBO =====
+        // Combo logic
         if (judgement == "MISS")
         {
             combo = 0;
@@ -216,10 +181,7 @@ public class GameManager : MonoBehaviour
                 combo = 0;
             }
         }
-
-        // ===== UPDATE UI =====
-        scoreText.text = score.ToString();
-
+        UpdateUI();
         ShowEvaluate(judgement);
         ShowCombo();
     }
@@ -250,9 +212,12 @@ public class GameManager : MonoBehaviour
             StopCoroutine(comboFadeRoutine);
 
         comboFadeRoutine = StartCoroutine(FadeOut(comboCanvasGroup, comboDuration));
-        
     }
-
+    public void OnSongFinished()
+    {
+        StarSaveData.Save(progressBar.GetCurrentStars()); // 🔥 thêm dòng này
+        StartCoroutine(ShowResultAfterDelay(cooldownByWin));
+    }
     IEnumerator FadeOut(CanvasGroup canvasGroup, float duration)
     {
         yield return new WaitForSeconds(duration);
