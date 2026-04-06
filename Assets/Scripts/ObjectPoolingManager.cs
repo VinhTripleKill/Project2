@@ -28,6 +28,7 @@ public class ObjectPoolingManager : MonoBehaviour
     private Queue<GameObject> slideStartPool = new Queue<GameObject>();
     private Queue<GameObject> slideCheckPool = new Queue<GameObject>();
     private Queue<GameObject> slideEndPool = new Queue<GameObject>();
+    public int activeNoteCount = 0;
     void Awake()
     {
         Instance = this;
@@ -83,60 +84,83 @@ public class ObjectPoolingManager : MonoBehaviour
         }
     }
 
-    // ================= TAP =================
-
     public GameObject GetTapNote()
     {
+        GameObject obj;
+
         if (tapPool.Count > 0)
         {
-            GameObject obj = tapPool.Dequeue();
-            obj.SetActive(true);
-            return obj;
+            obj = tapPool.Dequeue();
+        }
+        else
+        {
+            obj = Instantiate(tapNotePrefab);
         }
 
-        return Instantiate(tapNotePrefab);
+        obj.SetActive(true);
+        activeNoteCount++; // 🔥 ADD
+
+        return obj;
     }
 
     public void ReturnTapNote(GameObject obj)
     {
         obj.SetActive(false);
         tapPool.Enqueue(obj);
-    }
 
-    // ================= HOLD =================
+        activeNoteCount--; // 🔥 REMOVE
+    }
 
     public GameObject GetHoldNote()
     {
+        GameObject obj;
+
         if (holdPool.Count > 0)
         {
-            GameObject obj = holdPool.Dequeue();
-            obj.SetActive(true);
-            return obj;
+            obj = holdPool.Dequeue();
+        }
+        else
+        {
+            obj = Instantiate(holdNotePrefab);
         }
 
-        return Instantiate(holdNotePrefab);
+        obj.SetActive(true);
+        activeNoteCount++; // 🔥 ADD
+
+        return obj;
     }
 
     public void ReturnHoldNote(GameObject obj)
     {
         obj.SetActive(false);
         holdPool.Enqueue(obj);
+
+        activeNoteCount--; // 🔥 REMOVE
     }
     public GameObject GetSlideNote()
     {
+        GameObject obj;
+
         if (slidePool.Count > 0)
         {
-            GameObject obj = slidePool.Dequeue();
-            obj.SetActive(true);
-            return obj;
+            obj = slidePool.Dequeue();
+        }
+        else
+        {
+            obj = Instantiate(slideNotePrefab);
         }
 
-        return Instantiate(slideNotePrefab);
+        obj.SetActive(true);
+        activeNoteCount++; // 🔥 ADD
+
+        return obj;
     }
     public void ReturnSlideNote(GameObject obj)
     {
         obj.SetActive(false);
         slidePool.Enqueue(obj);
+
+        activeNoteCount--; // 🔥 REMOVE
     }
     public GameObject GetSlideStart()
     {

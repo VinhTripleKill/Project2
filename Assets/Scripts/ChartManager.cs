@@ -72,14 +72,14 @@ public class ChartManager : MonoBehaviour
         SpawnNotesByTime();
     }
     bool IsSongFinished()
-    {
-        if (AudioManager.Instance == null) return false;
+{
+    if (AudioManager.Instance == null) return false;
 
-        float length = AudioManager.Instance.audioSource.clip.length;
-        double time = AudioManager.Instance.SongTimeDSP;
+    float length = AudioManager.Instance.audioSource.clip.length;
+    double time = AudioManager.Instance.SongTimeDSP;
 
-        return time >= length;
-    }
+    return time >= length;
+}
     public void SetSpeed(float speed)
     {
         speedMultiplier = speed;

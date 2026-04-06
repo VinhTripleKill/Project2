@@ -23,11 +23,9 @@ public class ProgressBar : MonoBehaviour
         }
 
         starCollected = new bool[starPercents.Length];
-
-        // 🔥 LOAD DATA CŨ
-        if (StarSaveData.hasData)
+        if (SaveDataManager.hasData)
         {
-            previousCollected = (bool[])StarSaveData.collected.Clone();
+            previousCollected = (bool[])SaveDataManager.collectedStars.Clone();
         }
         else
         {
@@ -119,7 +117,18 @@ public class ProgressBar : MonoBehaviour
             }
         }
     }
+    public int GetCurrentRunStarCount()
+    {
+        int count = 0;
 
+        for (int i = 0; i < starCollected.Length; i++)
+        {
+            if (starCollected[i] && !previousCollected[i])
+                count++;
+        }
+
+        return count;
+    }
     void SetStarValue(Image star, float value)
     {
         Color c = star.color;

@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private ProgressBar progressBar;
     public static GameManager Instance;
+    public float FinalPlayTime { get; private set; }
     [Header("Result")]
     public GameObject resultGame;
     [Header("Result Setting")]
     [SerializeField] private float cooldownByLose = 2f;
-    [SerializeField] private float cooldownByWin = 5f;
     [Header("UI")]
     public TextMeshProUGUI evaluateText;
     public TextMeshProUGUI scoreText;
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         comboText.text = "";
         comboCanvasGroup.alpha = 0;
         evaluateCanvasGroup.alpha = 0;
-
+        score = 0;
         // Khởi tạo tốc độ mặc định
         speed = 1f;
         SetSpeed(1f);
@@ -84,19 +84,52 @@ public class GameManager : MonoBehaviour
 
         resultGame.SetActive(true);
     }
+    public int GetScore()
+    {
+        return score;
+    }
     public void TriggerGameOver()
     {
         if (IsGameOver) return;
 
         IsGameOver = true;
+        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
+        SaveDataManager.SaveScore(score);
 
-        // 🔥 SAVE STAR TRƯỚC KHI REPLAY
-        StarSaveData.Save(progressBar.GetCurrentStars());
+        // ⏱ lưu thời gian ngay lúc chết
+        FinalPlayTime = (float)AudioManager.Instance.SongTimeDSP;
 
         StartCoroutine(AudioManager.Instance.FadeOutPitchThenStop(1f));
         StartCoroutine(ShowResultAfterDelay(cooldownByLose));
     }
+    bool HasActiveNotes()
+    {
+        return ObjectPoolingManager.Instance.activeNoteCount > 0;
+        
+    }
+    public void OnSongFinished()
+    {
+        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
+        FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
 
+        StartCoroutine(WaitForAllNotesThenShowResult());
+    }
+    IEnumerator WaitForAllNotesThenShowResult()
+    {
+        // chờ cho tới khi hết note
+        while (HasActiveNotes())
+        {
+            yield return null;
+        }
+
+        // 🔥 LÚC NÀY mới tính điểm & lưu
+        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
+        SaveDataManager.SaveScore(score);
+
+        FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
+
+        resultGame.SetActive(true);
+    }
     IEnumerator StartGameRoutine()
     {
         yield return new WaitForSeconds(startCooldown);
@@ -213,10 +246,11 @@ public class GameManager : MonoBehaviour
 
         comboFadeRoutine = StartCoroutine(FadeOut(comboCanvasGroup, comboDuration));
     }
-    public void OnSongFinished()
+
+
+    public int GetCurrentRunStars()
     {
-        StarSaveData.Save(progressBar.GetCurrentStars()); // 🔥 thêm dòng này
-        StartCoroutine(ShowResultAfterDelay(cooldownByWin));
+        return progressBar.GetCurrentRunStarCount();
     }
     IEnumerator FadeOut(CanvasGroup canvasGroup, float duration)
     {
