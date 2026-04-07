@@ -7,7 +7,10 @@ public class TapNote : MonoBehaviour
     public float hitTime;
     private SpriteRenderer sr;
     [Header("Movement")]
-
+    [Header("Scale Visual")]
+    [SerializeField] private float minScaleY = 0.5f;
+    [SerializeField] private float maxScaleY = 1.5f;
+    private float baseScaleY = 1f;
     public float hitLineY = -3.5f;
     public float despawnY = -6.5f;   // khi ra khỏi màn hình
 
@@ -28,6 +31,22 @@ public class TapNote : MonoBehaviour
         spawnX = transform.position.x;
         SetAlpha(1f);
         JudgeManager.Instance.RegisterNote(this);
+        baseScaleY = transform.localScale.y;
+        UpdateScaleByJudge();
+    }
+    void UpdateScaleByJudge()
+    {
+        float window = JudgeManager.Instance.goodWindow;
+
+        float speed = ChartManager.Instance.CurrentScrollSpeed;
+
+        float length = window * 2f * speed;
+
+        transform.localScale = new Vector3(
+            transform.localScale.x,
+            length,
+            transform.localScale.z
+        );
     }
     void SetAlpha(float alpha)
     {
@@ -36,6 +55,7 @@ public class TapNote : MonoBehaviour
         Color c = sr.color;
         c.a = alpha;
         sr.color = c;
+
     }
     void Update()
     {
@@ -54,8 +74,9 @@ public class TapNote : MonoBehaviour
         {
             CheckMiss();
         }
-
+        UpdateScaleByJudge();
         CheckDespawn();
+      
     }
     void AutoJudge()
     {
@@ -77,6 +98,9 @@ public class TapNote : MonoBehaviour
         float currentSpeed = ChartManager.Instance.CurrentScrollSpeed;
 
         float y = hitLineY + timeUntilHit * currentSpeed;
+
+        // 🔥 offset theo scale để giữ tâm đúng
+        float halfLength = transform.localScale.y / 2f;
 
         transform.position = new Vector3(spawnX, y, 0f);
     }

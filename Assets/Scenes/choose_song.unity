@@ -446,6 +446,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8413c82a218563e44a1e82e6beec67f0, type: 2}
   - {fileID: 11400000, guid: b0c826be002df6a4299696607f51f204, type: 2}
   - {fileID: 11400000, guid: e1b4ce664a140f642ae0a3b9b170fe7a, type: 2}
+  - {fileID: 11400000, guid: e752afd35abbad440951d5767e8e83a5, type: 2}
   content: {fileID: 1313595246}
   songItemPrefab: {fileID: 8791035901042146901, guid: cdcb4d1ba64e14049bb436592d71b84f, type: 3}
   cover: {fileID: 2059234306}
@@ -1352,7 +1353,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000026764706}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1313595247

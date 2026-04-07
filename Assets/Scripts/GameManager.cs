@@ -6,8 +6,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Resume Cooldown")]
+    public TextMeshProUGUI coolDownResumeText;
+    [SerializeField] private float resumeCooldown = 3f;
+
+    private bool isResumeCoolingDown = false;
     [SerializeField] private ProgressBar progressBar;
     public static GameManager Instance;
+    public bool IsResultShowing { get; private set; } = false;
     public float FinalPlayTime { get; private set; }
     [Header("Result")]
     public GameObject resultGame;
@@ -81,7 +87,7 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowResultAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
-
+        IsResultShowing = true;
         resultGame.SetActive(true);
     }
     public int GetScore()
@@ -127,7 +133,7 @@ public class GameManager : MonoBehaviour
         SaveDataManager.SaveScore(score);
 
         FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
-
+        IsResultShowing = true;
         resultGame.SetActive(true);
     }
     IEnumerator StartGameRoutine()
@@ -140,6 +146,9 @@ public class GameManager : MonoBehaviour
 
     public void ToggleStatus()
     {
+        if (IsResultShowing) return;
+        if (isResumeCoolingDown) return; // 🔥 chặn spam
+
         if (IsPaused)
             Resume();
         else
@@ -165,14 +174,46 @@ public class GameManager : MonoBehaviour
     public void Resume()
     {
         if (!IsPaused) return;
+        if (isResumeCoolingDown) return;
 
-        IsPaused = false;
+        StartCoroutine(ResumeWithCountdown());
 
         pauseUI.SetActive(false);
         pauseButton.SetActive(true);
 
+    }
+    IEnumerator ResumeWithCountdown()
+    {
+        isResumeCoolingDown = true;
+
+        // Hiện text countdown
+        coolDownResumeText.gameObject.SetActive(true);
+
+        float time = resumeCooldown;
+
+        while (time > 0)
+        {
+            coolDownResumeText.text = Mathf.Ceil(time).ToString();
+            time -= Time.unscaledDeltaTime; // 🔥 dùng unscaled vì đang pause
+            yield return null;
+        }
+
+        coolDownResumeText.text = "GO!";
+        yield return new WaitForSecondsRealtime(0.3f);
+
+        coolDownResumeText.gameObject.SetActive(false);
+
+        // 🔥 resume thật sự ở đây
+        IsPaused = false;
+
         AudioManager.Instance.ResumeSong();
         Time.timeScale = 1f;
+
+        isResumeCoolingDown = false;
+    }
+    public bool IsResumeCoolingDown()
+    {
+        return isResumeCoolingDown;
     }
 
     public void ProcessJudgement(string judgement)

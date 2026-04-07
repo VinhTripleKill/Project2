@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,7 +7,11 @@ using UnityEngine.UI;
 public class ResultUI : MonoBehaviour
 {
     public Button replayButton;
+    [Header("Rank System")]
+    [SerializeField] private List<float> rankThresholds; // % (0 → 100)
+    [SerializeField] private List<Sprite> rankSprites;
 
+    [SerializeField] private Image rankResultImage;
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI total_stars_collected;
     [SerializeField] private TextMeshProUGUI durationTimePlay;
@@ -42,6 +47,36 @@ public class ResultUI : MonoBehaviour
         // ===== 🏆 HIGH SCORE =====
         int best = SaveDataManager.highestScore;
         highestScore.text = $"Highest Score:  {best}";
+        UpdateRank(currentScore);
+    }
+    void UpdateRank(int currentScore)
+    {
+        if (ChartManager.Instance == null) return;
+
+        int maxScore = ChartManager.Instance.MaxPerfectScore;
+
+        if (maxScore <= 0) return;
+
+        float percent = (float)currentScore / maxScore * 100f;
+
+        int index = GetRankIndex(percent);
+
+        if (index >= 0 && index < rankSprites.Count)
+        {
+            rankResultImage.sprite = rankSprites[index];
+        }
+    }
+    int GetRankIndex(float percent)
+    {
+        for (int i = 0; i < rankThresholds.Count; i++)
+        {
+            if (percent >= rankThresholds[i])
+            {
+                return i;
+            }
+        }
+
+        return rankThresholds.Count - 1;
     }
 
     void OnReplay()

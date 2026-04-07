@@ -18,6 +18,7 @@ public class ChartManager : MonoBehaviour
     public static ChartManager Instance;
     private float targetSpeed;
     public float CurrentScrollSpeed => scrollSpeed;
+    public int MaxPerfectScore { get; private set; }
     private bool stopSpawn = false;
     private bool notifiedEnd = false;
     void Awake()
@@ -44,6 +45,7 @@ public class ChartManager : MonoBehaviour
         baseScrollSpeed = distance / spawnLeadTime;
 
         scrollSpeed = baseScrollSpeed;
+        CalculateMaxPerfectScore();
     }
     void Update()
     {
@@ -70,6 +72,33 @@ public class ChartManager : MonoBehaviour
         }
 
         SpawnNotesByTime();
+    }
+    void CalculateMaxPerfectScore()
+    {
+        int total = 0;
+
+        foreach (var note in chartData.notes)
+        {
+            // TAP
+            if (note.slideNodes == null || note.slideNodes.Length <= 1)
+            {
+                if (note.endTime <= note.hitTime)
+                {
+                    total += 5; // PERFECT tap
+                }
+                else
+                {
+                    total += 10; // HOLD: head + tail
+                }
+            }
+            else
+            {
+                // SLIDE: mỗi node = 1 PERFECT
+                total += note.slideNodes.Length * 5;
+            }
+        }
+
+        MaxPerfectScore = total;
     }
     bool IsSongFinished()
 {

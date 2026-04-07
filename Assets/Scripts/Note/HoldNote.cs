@@ -32,8 +32,11 @@ public class HoldNote : MonoBehaviour
         isHolding = false;
         finished = false;
 
-        float duration = endTime - startTime;
-        float length = GetCurrentLength();
+        float window = JudgeManager.Instance.goodWindow;
+        float visualDuration = (endTime - startTime) + window * 2f;
+
+        float speed = ChartManager.Instance.CurrentScrollSpeed;
+        float length = visualDuration * speed;
 
         // base
         bodyBase.localScale = new Vector3(bodyBase.localScale.x, length, 1f);
@@ -99,9 +102,14 @@ public class HoldNote : MonoBehaviour
 
         // ✅ đang giữ → fill dần
         float songTime = (float)AudioManager.Instance.SongTimeDSP;
+        float window = JudgeManager.Instance.goodWindow;
 
-        float progress = Mathf.Clamp01((songTime - holdStartTime) / (endTime - startTime));
+        float visualStart = startTime - window;
+        float visualEnd = endTime + window;
 
+        float progress = Mathf.Clamp01(
+            (songTime - visualStart) / (visualEnd - visualStart)
+        );
         float fillLength = length * progress;
 
         currentFillLength = fillLength; // 🔥 LƯU LẠI
@@ -124,7 +132,7 @@ public class HoldNote : MonoBehaviour
     }
     float GetCurrentLength()
     {
-        float duration = endTime - startTime;
+        float duration = (endTime - startTime) + JudgeManager.Instance.goodWindow * 2f;
         float speed = ChartManager.Instance.CurrentScrollSpeed;
         return duration * speed;
     }
@@ -190,8 +198,12 @@ public class HoldNote : MonoBehaviour
     void Move()
     {
         float songTime = (float)AudioManager.Instance.SongTimeDSP;
+        float window = JudgeManager.Instance.goodWindow;
 
-        float timeUntilHit = startTime - songTime;
+        // dịch head lên sớm hơn để center đúng vùng hit
+        float visualStartTime = startTime - window;
+
+        float timeUntilHit = visualStartTime - songTime;
         float currentSpeed = ChartManager.Instance.CurrentScrollSpeed;
         float yPosition = hitLineY + timeUntilHit * currentSpeed;
         transform.position = new Vector3(spawnX, yPosition, 0f);
@@ -240,9 +252,14 @@ public class HoldNote : MonoBehaviour
     void SnapFillToHitLine()
     {
         float songTime = (float)AudioManager.Instance.SongTimeDSP;
+        float window = JudgeManager.Instance.goodWindow;
 
-        float progress = Mathf.Clamp01((songTime - startTime) / (endTime - startTime));
+        float visualStart = startTime - window;
+        float visualEnd = endTime + window;
 
+        float progress = Mathf.Clamp01(
+            (songTime - visualStart) / (visualEnd - visualStart)
+        );
         float length = GetCurrentLength() * progress;
 
         currentFillLength = length; // 🔥 LƯU LẠI

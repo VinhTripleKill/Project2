@@ -49,6 +49,7 @@ public class InputManager : MonoBehaviour
     }
     void OnPausePressed(InputAction.CallbackContext ctx)
     {
+        if (GameManager.Instance.IsResultShowing) return;
         GameManager.Instance.ToggleStatus();
     }
 
@@ -98,6 +99,11 @@ public class InputManager : MonoBehaviour
         return AudioManager.Instance != null
             && GameManager.Instance != null
             && GameManager.Instance.IsGameStarted
-            && !GameManager.Instance.IsPaused; 
+            && !GameManager.Instance.IsPaused
+            && !GameManager.Instance.IsGameOver
+            && !GameManager.Instance.IsResultShowing
+            && !GameManager.Instance.IsResumeCoolingDown();
+
+
     }
 }
