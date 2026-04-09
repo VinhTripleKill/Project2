@@ -2,6 +2,13 @@
 
 public class TapNote : MonoBehaviour
 {
+    public enum ModePlay
+    {
+        NotVisualByJudge,
+        VisualByJudge
+    }
+    [Header("Mode")]
+    public ModePlay modePlay = ModePlay.NotVisualByJudge;
     [Header("Note Data")]
     public int laneIndex;
     public float hitTime;
@@ -36,11 +43,20 @@ public class TapNote : MonoBehaviour
     }
     void UpdateScaleByJudge()
     {
-        float window = JudgeManager.Instance.goodWindow;
-
         float speed = ChartManager.Instance.CurrentScrollSpeed;
 
-        float length = window * 2f * speed;
+        float length;
+
+        if (modePlay == ModePlay.VisualByJudge)
+        {
+            float window = JudgeManager.Instance.goodWindow;
+            length = window * 2f * speed;
+        }
+        else
+        {
+            // 🔥 NOT VISUAL: giữ scale gốc
+            length = baseScaleY;
+        }
 
         transform.localScale = new Vector3(
             transform.localScale.x,
@@ -61,7 +77,7 @@ public class TapNote : MonoBehaviour
     {
         if (!GameManager.Instance.IsGameStarted) return;
         if (GameManager.Instance.IsPaused) return;
-        if (GameManager.Instance.IsGameOver) return; // 🔥 THÊM
+        if (GameManager.Instance.IsGameOver) return;
 
         Move();
 
@@ -74,9 +90,14 @@ public class TapNote : MonoBehaviour
         {
             CheckMiss();
         }
-        UpdateScaleByJudge();
+
+        // 🔥 chỉ update scale khi cần
+        if (modePlay == ModePlay.VisualByJudge)
+        {
+            UpdateScaleByJudge();
+        }
+
         CheckDespawn();
-      
     }
     void AutoJudge()
     {
@@ -99,8 +120,9 @@ public class TapNote : MonoBehaviour
 
         float y = hitLineY + timeUntilHit * currentSpeed;
 
-        // 🔥 offset theo scale để giữ tâm đúng
+        // 🔥 giữ tâm đúng khi scale thay đổi
         float halfLength = transform.localScale.y / 2f;
+        y += halfLength;
 
         transform.position = new Vector3(spawnX, y, 0f);
     }

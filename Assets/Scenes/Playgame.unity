@@ -4214,7 +4214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606fe304b509d654486c14ad5c3ebc93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChartManager
-  chartFile: {fileID: 4900000, guid: c33e878daf4e50a4899766af80e51916, type: 3}
+  chartFile: {fileID: 4900000, guid: 6add4c948c9a12045affb37305686abb, type: 3}
   tapNotePrefab: {fileID: 1515849207444713372, guid: 0685e52e4e8ad2a4f9c166fbbcbcdb1a, type: 3}
   laneSpawnPoints:
   - {fileID: 1293077020}

@@ -4,7 +4,6 @@ public class SlidePoint : MonoBehaviour
 {
     public int laneIndex;
     public float hitTime;
-    public float scrollSpeed;
     public float hitLineY;
     public bool isEndPoint = false;
     public float despawnY = -9.5f;
@@ -24,11 +23,10 @@ public class SlidePoint : MonoBehaviour
 
     private SpriteRenderer sr;
     public SlidePointState state = SlidePointState.Normal;
-    public void Initialize(int lane, float time, float speed, float lineY, SlideNote parent)
+    public void Initialize(int lane, float time, float lineY, SlideNote parent)
     {
         laneIndex = lane;
         hitTime = time;
-        scrollSpeed = speed;
         hitLineY = lineY;
         parentSlide = parent;
 
@@ -97,9 +95,8 @@ public class SlidePoint : MonoBehaviour
     {
         float songTime = (float)AudioManager.Instance.SongTimeDSP;
         float timeUntilHit = hitTime - songTime;
-
-        float y = hitLineY + timeUntilHit * scrollSpeed;
-
+        float speed = ChartManager.Instance.CurrentScrollSpeed;
+        float y = hitLineY + timeUntilHit * speed;
         transform.position = new Vector3(spawnX, y, 0);
     }
     public void SetState(SlidePointState newState)

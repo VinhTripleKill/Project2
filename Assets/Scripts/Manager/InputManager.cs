@@ -4,7 +4,8 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
-    private GameInput input;
+    public static InputManager Instance;
+    public GameInput input { get; private set; }
 
     private Action<InputAction.CallbackContext>[] pressActions;
     private Action<InputAction.CallbackContext>[] releaseActions;
@@ -14,7 +15,8 @@ public class InputManager : MonoBehaviour
     void Awake()
     {
         input = new GameInput();
-
+        Instance = this;
+        LoadBindings();
         pressActions = new Action<InputAction.CallbackContext>[LaneCount];
         releaseActions = new Action<InputAction.CallbackContext>[LaneCount];
 
@@ -71,7 +73,32 @@ public class InputManager : MonoBehaviour
 
         input.Disable();
     }
+    void LoadBindings()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            string key = PlayerPrefs.GetString("LaneKey_" + i, "");
 
+            if (string.IsNullOrEmpty(key)) continue;
+
+            ApplyRebind(i, key);
+        }
+    }
+    public void ApplyRebind(int lane, string key)
+    {
+        InputAction action = null;
+
+        switch (lane)
+        {
+            case 0: action = input.Game.Lane0; break;
+            case 1: action = input.Game.Lane1; break;
+            case 2: action = input.Game.Lane2; break;
+            case 3: action = input.Game.Lane3; break;
+        }
+
+        string path = $"<Keyboard>/{key.ToLower()}";
+        action.ApplyBindingOverride(0, path);
+    }
     void OnPress(int lane)
     {
         if (!IsGameplayActive()) return;
@@ -98,7 +125,7 @@ public class InputManager : MonoBehaviour
     {
         return AudioManager.Instance != null
             && GameManager.Instance != null
-            && GameManager.Instance.IsGameStarted
+            //&& GameManager.Instance.IsGameStarted
             && !GameManager.Instance.IsPaused
             && !GameManager.Instance.IsGameOver
             && !GameManager.Instance.IsResultShowing

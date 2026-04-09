@@ -59,7 +59,7 @@ public class SlideNote : MonoBehaviour
             obj.transform.position = spawn.position;
 
             SlidePoint node = obj.GetComponent<SlidePoint>();
-            node.Initialize(data.lane, data.time, scrollSpeed, hitLineY, this);
+            node.Initialize(data.lane, data.time, hitLineY, this);
 
             nodes.Add(node);
 
