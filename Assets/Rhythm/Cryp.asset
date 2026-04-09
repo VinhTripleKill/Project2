@@ -16,5 +16,5 @@ MonoBehaviour:
   artist: Sakuzyo
   cover: {fileID: 7747060836690186255, guid: b9ae5405c9c22c445886d8482be04265, type: 3}
   audio: {fileID: 8300000, guid: 81c4b9045e8ec9242b4eadf2f458120f, type: 3}
-  chart: {fileID: 4900000, guid: d876aa03455f4b5429d8a067c8f782af, type: 3}
+  chart: {fileID: 4900000, guid: f62b8969c248e1c4085482317c1202c6, type: 3}
   video: {fileID: 32900000, guid: 582349f49105960458085055caccdcf1, type: 3}

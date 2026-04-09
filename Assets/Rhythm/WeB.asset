@@ -16,5 +16,5 @@ MonoBehaviour:
   artist: D-D-Dice
   cover: {fileID: -4364034832326165938, guid: c801bb7501136d04da45be153bd8ed70, type: 3}
   audio: {fileID: 8300000, guid: bfd6e64ad16bd3d478940f6f7df26d20, type: 3}
-  chart: {fileID: 4900000, guid: f787e48d42e77d043bac877156b1b15f, type: 3}
+  chart: {fileID: 4900000, guid: 431308d4edf215f4db349f4d755f3721, type: 3}
   video: {fileID: 32900000, guid: 9814b57fa3783fa429f29b7e07ff2e71, type: 3}

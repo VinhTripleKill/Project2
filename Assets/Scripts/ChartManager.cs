@@ -141,5 +141,29 @@ public class ChartManager : MonoBehaviour
             hold.Initialize(noteData.lane, noteData.hitTime, noteData.endTime, scrollSpeed, hitLineY);
         }
     }
-    
+    public void LoadChartFromSong(TextAsset newChart)
+    {
+        chartFile = newChart;
+
+        chartData = JsonUtility.FromJson<ChartData>(chartFile.text);
+
+        if (chartData == null || chartData.notes == null)
+        {
+            Debug.LogError("Chart JSON parse failed!");
+            return;
+        }
+
+        ValidateChart();
+        Array.Sort(chartData.notes, CompareNoteTime);
+
+        float distance = spawnY - hitLineY;
+        baseScrollSpeed = distance / spawnLeadTime;
+        scrollSpeed = baseScrollSpeed;
+
+        nextNoteIndex = 0;     // ⚠ reset index
+        stopSpawn = false;     // ⚠ reset state
+        notifiedEnd = false;   // ⚠ reset end flag
+
+        CalculateMaxPerfectScore();
+    }
 }

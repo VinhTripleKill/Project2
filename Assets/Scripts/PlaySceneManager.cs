@@ -3,17 +3,6 @@ using UnityEngine.Video;
 
 public class PlaySceneManager : MonoBehaviour
 {
-    private AudioSource audioSource;
-    private VideoPlayer videoPlayer;
-    private ChartManager chartManager;
-
-    void Awake()
-    {
-        audioSource = FindAnyObjectByType<AudioSource>();
-        videoPlayer = FindAnyObjectByType<VideoPlayer>();
-        chartManager = FindAnyObjectByType<ChartManager>();
-    }
-
     void Start()
     {
         var song = PlaySceneData.song;
@@ -24,12 +13,21 @@ public class PlaySceneManager : MonoBehaviour
             return;
         }
 
-        audioSource.clip = song.audio;
-        audioSource.Play();
+        // AUDIO
+        var audio = FindAnyObjectByType<AudioSource>();
+        audio.clip = song.audio;
+        audio.Play();
 
-        videoPlayer.clip = song.video;
-        videoPlayer.Play();
+        // CHART
+        var chart = FindAnyObjectByType<ChartManager>();
+        chart.LoadChartFromSong(song.chart);
 
-        chartManager.chartFile = song.chart;
+        // VIDEO (tu BG)
+        var video = GameObject
+            .Find("backGroundManager/BG")
+            .GetComponent<VideoPlayer>();
+
+        video.clip = song.video;
+        video.Play();
     }
 }
