@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -24,7 +25,8 @@ public class PauseUI : MonoBehaviour
     [Header("Colors")]
     public Color normalColor = Color.white;
     public Color pressedColor = Color.gray;
-
+    [Header("Graphics Settings")]
+    public TMP_Dropdown resolutionDropdown;
     [Header("Audio Settings")]
     public Toggle musicToggle;
     public Slider musicSlider;
@@ -70,7 +72,12 @@ public class PauseUI : MonoBehaviour
 
     void Start()
     {
+        int saved = PlayerPrefs.GetInt("Resolution", 2); // default 1920x1080
+        resolutionDropdown.value = saved;
+        resolutionDropdown.RefreshShownValue();
 
+        SetResolution(saved); // apply luôn
+        resolutionDropdown.onValueChanged.AddListener(SetResolution);
         laneInput1.onClick.AddListener(() => OnClickLane(0));
         laneInput2.onClick.AddListener(() => OnClickLane(1));
         laneInput3.onClick.AddListener(() => OnClickLane(2));
@@ -127,7 +134,30 @@ public class PauseUI : MonoBehaviour
 
         return false;
     }
-    
+    public void SetResolution(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                Screen.SetResolution(1280, 720, FullScreenMode.FullScreenWindow);
+                break;
+
+            case 1:
+                Screen.SetResolution(1600, 900, FullScreenMode.FullScreenWindow);
+                break;
+
+            case 2:
+                Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
+                break;
+
+            case 3:
+                Screen.SetResolution(2560, 1440, FullScreenMode.FullScreenWindow);
+                break;
+        }
+
+        PlayerPrefs.SetInt("Resolution", index);
+        PlayerPrefs.Save();
+    }
     void OnClickLane(int lane)
     {
         currentLaneIndex = lane;
