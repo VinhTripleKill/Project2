@@ -6033,7 +6033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606fe304b509d654486c14ad5c3ebc93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChartManager
-  chartFile: {fileID: 4900000, guid: d589916d5dba9f84bb2ae62113839984, type: 3}
+  chartFile: {fileID: 4900000, guid: c33e878daf4e50a4899766af80e51916, type: 3}
   tapNotePrefab: {fileID: 1515849207444713372, guid: 0685e52e4e8ad2a4f9c166fbbcbcdb1a, type: 3}
   laneSpawnPoints:
   - {fileID: 1293077020}
@@ -13197,6 +13197,11 @@ MonoBehaviour:
   durationTimePlay: {fileID: 1596134761}
   score: {fileID: 2014412577}
   highestScore: {fileID: 1827897117}
+  perfectText: {fileID: 1856034935}
+  greatText: {fileID: 716134092}
+  goodText: {fileID: 2008140855}
+  missText: {fileID: 887996801}
+  maxCombo: {fileID: 596735130}
 --- !u!1 &1786288915
 GameObject:
   m_ObjectHideFlags: 0

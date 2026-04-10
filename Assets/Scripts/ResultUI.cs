@@ -17,7 +17,13 @@ public class ResultUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI durationTimePlay;
     [SerializeField] private TextMeshProUGUI score;
     [SerializeField] private TextMeshProUGUI highestScore;
+    [Header("Evaluate Stats")]
+    [SerializeField] private TextMeshProUGUI perfectText;
+    [SerializeField] private TextMeshProUGUI greatText;
+    [SerializeField] private TextMeshProUGUI goodText;
+    [SerializeField] private TextMeshProUGUI missText;
 
+    [SerializeField] private TextMeshProUGUI maxCombo;
     void Start()
     {
         replayButton.onClick.AddListener(OnReplay);
@@ -48,6 +54,14 @@ public class ResultUI : MonoBehaviour
         int best = SaveDataManager.highestScore;
         highestScore.text = $"Highest Score:  {best}";
         UpdateRank(currentScore);
+        // ===== 🔥 MAX COMBO =====
+        int maxComboValue = GameManager.Instance.GetMaxComboOverall();
+        maxCombo.text = $"{maxComboValue}";
+        // ===== 🎯 EVALUATE COUNT =====
+        perfectText.text = $" {GameManager.Instance.PerfectCount}";
+        greatText.text = $" {GameManager.Instance.GreatCount}";
+        goodText.text = $" {GameManager.Instance.GoodCount}";
+        missText.text = $" {GameManager.Instance.MissCount}";
     }
     void UpdateRank(int currentScore)
     {

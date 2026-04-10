@@ -6,6 +6,20 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    // ===== MAX COMBO TRACK =====
+    private int perfectCombo = 0;
+    private int greatCombo = 0;
+    private int goodCombo = 0;
+
+    public int PerfectCount { get; private set; }
+    public int GreatCount { get; private set; }
+    public int GoodCount { get; private set; }
+    public int MissCount { get; private set; }
+
+    private int maxPerfectCombo = 0;
+    private int maxGreatCombo = 0;
+    private int maxGoodCombo = 0;
+
     [Header("Resume Cooldown")]
     public TextMeshProUGUI coolDownResumeText;
     [SerializeField] private float resumeCooldown = 3f;
@@ -82,6 +96,105 @@ public class GameManager : MonoBehaviour
 
         if (ChartManager.Instance != null)
             ChartManager.Instance.SetSpeed(SpeedMultiplier);
+    }
+
+    public void ProcessJudgement(string judgement)
+    {
+        int addScore = 0;
+
+        switch (judgement)
+        {
+            case "PERFECT": addScore = 5; break;
+            case "GREAT": addScore = 3; break;
+            case "GOOD": addScore = 2; break;
+            case "MISS":
+                addScore = 0;
+                HpBar.Instance.TakeMissDamage();
+                break;
+        }
+
+        score += addScore;
+
+        // ===== RESET COMBO KHÁC =====
+        if (judgement != "PERFECT") perfectCombo = 0;
+        if (judgement != "GREAT") greatCombo = 0;
+        if (judgement != "GOOD") goodCombo = 0;
+       
+        // ===== TĂNG COMBO =====
+        switch (judgement)
+        {
+            case "PERFECT":
+                perfectCombo++;
+                maxPerfectCombo = Mathf.Max(maxPerfectCombo, perfectCombo);
+                break;
+
+            case "GREAT":
+                greatCombo++;
+                maxGreatCombo = Mathf.Max(maxGreatCombo, greatCombo);
+                break;
+
+            case "GOOD":
+                goodCombo++;
+                maxGoodCombo = Mathf.Max(maxGoodCombo, goodCombo);
+                break;
+
+           
+        }
+        switch (judgement)
+        {
+            case "PERFECT":
+                PerfectCount++;
+                perfectCombo++;
+                maxPerfectCombo = Mathf.Max(maxPerfectCombo, perfectCombo);
+                break;
+
+            case "GREAT":
+                GreatCount++;
+                greatCombo++;
+                maxGreatCombo = Mathf.Max(maxGreatCombo, greatCombo);
+                break;
+
+            case "GOOD":
+                GoodCount++;
+                goodCombo++;
+                maxGoodCombo = Mathf.Max(maxGoodCombo, goodCombo);
+                break;
+
+            case "MISS":
+                MissCount++;
+                break;
+        }
+        // ===== COMBO HIỂN THỊ (giữ logic cũ) =====
+        if (judgement == "MISS")
+        {
+            combo = 0;
+            sameTypeCount = 0;
+            lastJudgement = "";
+        }
+        else
+        {
+            if (judgement == lastJudgement)
+            {
+                sameTypeCount++;
+                if (sameTypeCount >= 2)
+                    combo++;
+            }
+            else
+            {
+                lastJudgement = judgement;
+                sameTypeCount = 1;
+                combo = 0;
+            }
+        }
+
+        UpdateUI();
+        ShowEvaluate(judgement);
+        ShowCombo();
+    }
+
+    public int GetMaxComboOverall()
+    {
+        return Mathf.Max(maxPerfectCombo, maxGreatCombo, maxGoodCombo);
     }
 
     IEnumerator ShowResultAfterDelay(float delay)
@@ -216,50 +329,7 @@ public class GameManager : MonoBehaviour
         return isResumeCoolingDown;
     }
 
-    public void ProcessJudgement(string judgement)
-    {
-        int addScore = 0;
-
-        switch (judgement)
-        {
-            case "PERFECT": addScore = 5; break;
-            case "GREAT": addScore = 3; break;
-            case "GOOD": addScore = 2; break;
-            case "MISS":
-                addScore = 0;
-                HpBar.Instance.TakeMissDamage();
-                break;
-        }
-
-        score += addScore;
-
-        // Combo logic
-        if (judgement == "MISS")
-        {
-            combo = 0;
-            sameTypeCount = 0;
-            lastJudgement = "";
-        }
-        else
-        {
-            if (judgement == lastJudgement)
-            {
-                sameTypeCount++;
-                if (sameTypeCount >= 2)
-                    combo++;
-            }
-            else
-            {
-                lastJudgement = judgement;
-                sameTypeCount = 1;
-                combo = 0;
-            }
-        }
-        UpdateUI();
-        ShowEvaluate(judgement);
-        ShowCombo();
-    }
-
+    
     void ShowEvaluate(string judgement)
     {
         evaluateText.text = judgement;
