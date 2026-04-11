@@ -32,6 +32,11 @@ public class AvatarBackgroundManager : MonoBehaviour
 
     void Start()
     {
+        if (PlaySessionManager.currentSong != null)
+        {
+            avatarImage.sprite = PlaySessionManager.currentSong.avatar;
+            videoPlayer.clip = PlaySessionManager.currentSong.videoClip;
+        }
         // sync avatar → BG
         if (avatarImage != null && backgroundImage != null)
         {

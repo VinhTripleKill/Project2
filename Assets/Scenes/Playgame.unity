@@ -2914,7 +2914,7 @@ VideoPlayer:
   m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 0
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
   m_Url: 
@@ -4973,8 +4973,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 274, y: 0}
-  m_SizeDelta: {x: 400, y: 50}
+  m_AnchoredPosition: {x: 515, y: 0}
+  m_SizeDelta: {x: 900, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &685748801
 MonoBehaviour:
@@ -8008,11 +8008,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 584785678}
+  - {fileID: 1004868808}
   - {fileID: 754335593}
   - {fileID: 1596134760}
   - {fileID: 1481551020}
   - {fileID: 1827897116}
-  - {fileID: 1004868808}
   m_Father: {fileID: 1763580754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -8054,8 +8054,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 337, y: 0}
-  m_SizeDelta: {x: 400, y: 50}
+  m_AnchoredPosition: {x: 532, y: 0}
+  m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1025006147
 MonoBehaviour:
@@ -13515,7 +13515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResultUI
   replayButton: {fileID: 1471648679}
-  nextButton: {fileID: 0}
+  nextButton: {fileID: 768168329}
   rankThresholds:
   - 95
   - 80
@@ -13530,6 +13530,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 85982fbbabe87544b8674aa57e3c1448, type: 3}
   - {fileID: 21300000, guid: 2e885998b9de5ce43b3f4f293255c4e2, type: 3}
   - {fileID: 21300000, guid: 0412c8499e550bb41ae5be7bed1a4427, type: 3}
+  avatarResult: {fileID: 1072470862}
   rankResultImage: {fileID: 617330040}
   total_stars_collected: {fileID: 1481551021}
   durationTimePlay: {fileID: 1596134761}
@@ -13539,6 +13540,8 @@ MonoBehaviour:
   greatText: {fileID: 716134092}
   goodText: {fileID: 2008140855}
   missText: {fileID: 887996801}
+  nameSong: {fileID: 1025006147}
+  nameArtist: {fileID: 685748801}
   maxCombo: {fileID: 596735130}
 --- !u!1 &1786288915
 GameObject:

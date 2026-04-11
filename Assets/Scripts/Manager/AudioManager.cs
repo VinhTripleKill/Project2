@@ -10,13 +10,18 @@ public class AudioManager : MonoBehaviour
     private bool isPlaying = false;
     private double pausedSongTime; // 🔥 THÊM
 
-
     void Awake()
     {
         Instance = this;
 
-        audioSource.Stop(); // 🔥 đảm bảo không auto play
+        if (PlaySessionManager.currentSong != null)
+        {
+            audioSource.clip = PlaySessionManager.currentSong.audioClip;
+        }
+
+        audioSource.Stop();
     }
+
     public double SongTimeDSP
     {
         get
@@ -27,11 +32,19 @@ public class AudioManager : MonoBehaviour
             return (AudioSettings.dspTime - songStartDSPTime) + globalOffset;
         }
     }
-
     public void PlaySong()
     {
-        songStartDSPTime = AudioSettings.dspTime; // 🔥 KHÔNG delay nữa
-        audioSource.Play(); // play ngay lập tức
+        if (audioSource.clip == null)
+        {
+            Debug.LogError("No AudioClip assigned!");
+            return;
+        }
+
+        audioSource.time = 0f; // 🔥 reset
+
+        songStartDSPTime = AudioSettings.dspTime;
+        audioSource.Play();
+
         isPlaying = true;
     }
     public void PauseSong()

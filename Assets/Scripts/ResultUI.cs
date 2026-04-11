@@ -11,7 +11,7 @@ public class ResultUI : MonoBehaviour
     [Header("Rank System")]
     [SerializeField] private List<float> rankThresholds; // % (0 → 100)
     [SerializeField] private List<Sprite> rankSprites;
-
+    [SerializeField] private Image avatarResult;
     [SerializeField] private Image rankResultImage;
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI total_stars_collected;
@@ -23,7 +23,8 @@ public class ResultUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI greatText;
     [SerializeField] private TextMeshProUGUI goodText;
     [SerializeField] private TextMeshProUGUI missText;
-
+    [SerializeField] private TextMeshProUGUI nameSong;     // 🔥 THÊM
+    [SerializeField] private TextMeshProUGUI nameArtist;   // 🔥 THÊM
     [SerializeField] private TextMeshProUGUI maxCombo;
     void Start()
     {
@@ -33,7 +34,13 @@ public class ResultUI : MonoBehaviour
 
     void UpdateResultInfo()
     {
-        if (GameManager.Instance == null) return;
+        // ===== 🎵 SONG INFO =====
+        if (PlaySessionManager.currentSong != null)
+        {
+            nameSong.text = PlaySessionManager.currentSong.songName;
+            nameArtist.text = PlaySessionManager.currentSong.artistName;
+            avatarResult.sprite = PlaySessionManager.currentSong.avatar;
+        }
 
         // ===== ⭐ STAR =====
         int stars = GameManager.Instance.GetCurrentRunStars();

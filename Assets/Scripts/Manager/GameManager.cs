@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        
         // Khởi tạo UI
         evaluateText.text = "";
         comboText.text = "";

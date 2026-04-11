@@ -27,6 +27,17 @@ public class ChartManager : MonoBehaviour
     }
     void Start()
     {
+        if (PlaySessionManager.currentSong != null)
+        {
+            chartFile = PlaySessionManager.currentSong.chartData;
+        }
+
+        if (chartFile == null)
+        {
+            Debug.LogError("No Chart File assigned!");
+            return;
+        }
+
         chartData = JsonUtility.FromJson<ChartData>(chartFile.text);
 
         if (chartData == null || chartData.notes == null)
@@ -35,10 +46,8 @@ public class ChartManager : MonoBehaviour
             return;
         }
 
-        // ✅ VALIDATE TRƯỚC
         ValidateChart();
 
-        // ✅ SORT NOTE
         Array.Sort(chartData.notes, CompareNoteTime);
 
         float distance = spawnY - hitLineY;

@@ -1,6 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SongDetailUI : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class SongDetailUI : MonoBehaviour
     public TMP_Text highScoreText;
 
     public AudioSource audioSource;
-
+    private SongData currentData;
     [Header("Rotate Settings")]
     public float rotateSpeed = 50f; // tốc độ xoay
 
@@ -27,7 +28,7 @@ public class SongDetailUI : MonoBehaviour
     public void Show(SongData data, SongItemUI itemUI)
     {
         gameObject.SetActive(true);
-
+        currentData = data;
         avatar.sprite = data.avatar;
 
         star1.sprite = data.star1;
@@ -79,5 +80,13 @@ public class SongDetailUI : MonoBehaviour
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
         return string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+    public void OnClickPlayGame()
+    {
+        if (currentData == null) return;
+
+        PlaySessionManager.SetSong(currentData); // 🔥 GỌN 1 DÒNG
+
+        SceneManager.LoadScene("PlayGame");
     }
 }
