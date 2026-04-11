@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PauseUI : MonoBehaviour
 {
     public static PauseUI Instance;
@@ -15,7 +15,7 @@ public class PauseUI : MonoBehaviour
     public Button audioBtn;
     public Button controlBtn;
     public Button graphicsBtn;
-
+    public Button restartButton;
     [Header("Panels")]
     public GameObject gameplay_In4;
     public GameObject audio_In4;
@@ -87,7 +87,7 @@ public class PauseUI : MonoBehaviour
         audioBtn.onClick.AddListener(() => SelectTab(audioBtn, audio_In4));
         controlBtn.onClick.AddListener(() => SelectTab(controlBtn, control_In4));
         graphicsBtn.onClick.AddListener(() => SelectTab(graphicsBtn, graphics_In4));
-
+        restartButton.onClick.AddListener(OnRestart);
         // Audio listeners
         musicSlider.onValueChanged.AddListener(OnVolumeChanged);
         musicToggle.onValueChanged.AddListener(OnToggleMusic);
@@ -116,6 +116,14 @@ public class PauseUI : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnRestart()
+    {
+        Time.timeScale = 1f;
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
     bool IsPointerOverUI()
     {
