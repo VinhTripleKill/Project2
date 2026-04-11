@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class ResultUI : MonoBehaviour
 {
-    public Button replayButton;
+    [SerializeField] private Button replayButton;
+    [SerializeField] private Button nextButton;
     [Header("Rank System")]
     [SerializeField] private List<float> rankThresholds; // % (0 → 100)
     [SerializeField] private List<Sprite> rankSprites;

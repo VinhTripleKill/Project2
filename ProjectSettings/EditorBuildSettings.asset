@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/choose_song.unity
     guid: ed4041093a1d8bd42ad3897ffdd88264
+  - enabled: 1
+    path: Assets/Scenes/ChooseSong.unity
+    guid: 47290c60fc192d048b4f8131beec22e3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

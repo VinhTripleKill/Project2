@@ -15,8 +15,6 @@ public class TapNote : MonoBehaviour
     private SpriteRenderer sr;
     [Header("Movement")]
     [Header("Scale Visual")]
-    [SerializeField] private float minScaleY = 0.5f;
-    [SerializeField] private float maxScaleY = 1.5f;
     private float baseScaleY = 1f;
     public float hitLineY = -3.5f;
     public float despawnY = -6.5f;   // khi ra khỏi màn hình

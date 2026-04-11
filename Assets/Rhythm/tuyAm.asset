@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: tuyAm
   m_EditorClassIdentifier: Assembly-CSharp::SongData
   songName: Tuy Am
-  artist: Xesi - Masew
-  cover: {fileID: -4364034832326165938, guid: 69637eea7c8361e488b072453de7533f, type: 3}
-  audio: {fileID: 8300000, guid: 38e3ea40de05b8e41859ff4c1c4194ef, type: 3}
-  chart: {fileID: 4900000, guid: 27cbf7b361827364ca02d23dac00d82b, type: 3}
-  video: {fileID: 32900000, guid: a15b11a5041298f49a5f921fa03d98ca, type: 3}
+  artistName: Xesi
+  avatar: {fileID: -4364034832326165938, guid: 69637eea7c8361e488b072453de7533f, type: 3}
+  chartData: {fileID: 4900000, guid: 27cbf7b361827364ca02d23dac00d82b, type: 3}
+  star1: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star2: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star3: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  rank: {fileID: 21300000, guid: ec14238a377c32047b65bba5c8ead57b, type: 3}
+  audioClip: {fileID: 8300000, guid: 38e3ea40de05b8e41859ff4c1c4194ef, type: 3}
+  difficulty: 2
+  videoClip: {fileID: 32900000, guid: a15b11a5041298f49a5f921fa03d98ca, type: 3}
+  duration: 0
+  highScore: 0

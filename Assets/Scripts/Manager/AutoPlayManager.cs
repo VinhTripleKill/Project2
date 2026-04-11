@@ -14,9 +14,17 @@ public class AutoPlayManager : MonoBehaviour
     {
         Instance = this;
         buttonImage = autoButton.GetComponent<Image>();
+        
+    }
+    void Start()
+    {
+        if (GameManager.Instance != null)
+        {
+            isAutoPlay = GameManager.Instance.playMode == ModePlay.Auto;
+        }
+
         UpdateButtonColor();
     }
-
     public void ToggleAutoPlay()
     {
         isAutoPlay = !isAutoPlay;

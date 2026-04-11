@@ -3,9 +3,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+public enum ModePlay
+{
+    Player,
+    Auto
+}
 public class GameManager : MonoBehaviour
 {
+
+    [Header("Play Mode")]
+    public ModePlay playMode = ModePlay.Player; // mặc định Player
     // ===== MAX COMBO TRACK =====
     private int perfectCombo = 0;
     private int greatCombo = 0;
@@ -85,8 +92,22 @@ public class GameManager : MonoBehaviour
         // Khởi tạo tốc độ mặc định
         speed = 1f;
         SetSpeed(1f);
-
+        SetupPlayMode();
         StartCoroutine(StartGameRoutine());
+    }
+
+    void SetupPlayMode()
+    {
+        if (AutoPlayManager.Instance == null) return;
+
+        if (playMode == ModePlay.Player)
+        {
+            AutoPlayManager.Instance.autoButton.gameObject.SetActive(false);
+        }
+        else // Auto mode
+        {
+            AutoPlayManager.Instance.autoButton.gameObject.SetActive(true);
+        }
     }
 
     public void SetSpeed(float newSpeed)
@@ -119,27 +140,7 @@ public class GameManager : MonoBehaviour
         if (judgement != "PERFECT") perfectCombo = 0;
         if (judgement != "GREAT") greatCombo = 0;
         if (judgement != "GOOD") goodCombo = 0;
-       
-        // ===== TĂNG COMBO =====
-        switch (judgement)
-        {
-            case "PERFECT":
-                perfectCombo++;
-                maxPerfectCombo = Mathf.Max(maxPerfectCombo, perfectCombo);
-                break;
 
-            case "GREAT":
-                greatCombo++;
-                maxGreatCombo = Mathf.Max(maxGreatCombo, greatCombo);
-                break;
-
-            case "GOOD":
-                goodCombo++;
-                maxGoodCombo = Mathf.Max(maxGoodCombo, goodCombo);
-                break;
-
-           
-        }
         switch (judgement)
         {
             case "PERFECT":
