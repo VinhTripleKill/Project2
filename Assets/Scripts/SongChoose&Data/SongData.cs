@@ -20,7 +20,9 @@ public class SongData : ScriptableObject
     public Sprite star1;
     public Sprite star2;
     public Sprite star3;
+    [Header("Rank")]
     public Sprite rank;
+    public int rankIndex = -1; // 🔥 THÊM (chưa có rank = -1)
     [Header("Star Collected (0-3)")]
     [Range(0, 3)]
     public int starCollected = 0;

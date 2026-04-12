@@ -23,13 +23,17 @@ public class ProgressBar : MonoBehaviour
         }
 
         starCollected = new bool[starPercents.Length];
-        if (SaveDataManager.hasData)
+        previousCollected = new bool[starPercents.Length];
+
+        // 🔥 LẤY TỪ SONG
+        if (PlaySessionManager.currentSong != null)
         {
-            previousCollected = (bool[])SaveDataManager.collectedStars.Clone();
-        }
-        else
-        {
-            previousCollected = new bool[starPercents.Length];
+            int collected = PlaySessionManager.currentSong.starCollected;
+
+            for (int i = 0; i < collected; i++)
+            {
+                previousCollected[i] = true;
+            }
         }
 
         SpawnStarPoints();

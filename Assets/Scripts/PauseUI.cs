@@ -16,6 +16,11 @@ public class PauseUI : MonoBehaviour
     public Button controlBtn;
     public Button graphicsBtn;
     public Button restartButton;
+    public Button exitButton;
+    [Header("Exit Confirm")]
+    public GameObject exitNotification; // panel chứa yes/no
+    public Button yesButton;
+    public Button noButton;
     [Header("Panels")]
     public GameObject gameplay_In4;
     public GameObject audio_In4;
@@ -75,7 +80,11 @@ public class PauseUI : MonoBehaviour
         int saved = PlayerPrefs.GetInt("Resolution", 2); // default 1920x1080
         resolutionDropdown.value = saved;
         resolutionDropdown.RefreshShownValue();
+        exitButton.onClick.AddListener(OnClickExit);
+        yesButton.onClick.AddListener(OnConfirmExit);
+        noButton.onClick.AddListener(OnCancelExit);
 
+        exitNotification.SetActive(false);
         SetResolution(saved); // apply luôn
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
         laneInput1.onClick.AddListener(() => OnClickLane(0));
@@ -117,7 +126,24 @@ public class PauseUI : MonoBehaviour
             }
         }
     }
+    void OnClickExit()
+    {
+        exitNotification.SetActive(true);
+    }
+    void OnCancelExit()
+    {
+        exitNotification.SetActive(false);
+    }
+    void OnConfirmExit()
+    {
+        Time.timeScale = 1f;
 
+        // 🔥 QUAN TRỌNG: reset session
+        PlaySessionManager.Clear();
+
+        // 🔥 KHÔNG gọi save gì hết → auto mất kết quả run
+        SceneManager.LoadScene("ChooseSong");
+    }
     void OnRestart()
     {
         Time.timeScale = 1f;

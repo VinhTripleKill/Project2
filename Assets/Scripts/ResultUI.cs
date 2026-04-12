@@ -29,55 +29,73 @@ public class ResultUI : MonoBehaviour
     void Start()
     {
         replayButton.onClick.AddListener(OnReplay);
+        nextButton.onClick.AddListener(OnNext); // 🔥 THÊM
         UpdateResultInfo();
     }
 
     void UpdateResultInfo()
     {
-        // ===== 🎵 SONG INFO =====
-        if (PlaySessionManager.currentSong != null)
-        {
-            nameSong.text = PlaySessionManager.currentSong.songName;
-            nameArtist.text = PlaySessionManager.currentSong.artistName;
-            avatarResult.sprite = PlaySessionManager.currentSong.avatar;
-        }
+        if (PlaySessionManager.currentSong == null) return;
 
+        var song = PlaySessionManager.currentSong;
+
+        // ===== 🎵 SONG INFO =====
+        nameSong.text = song.songName;
+        nameArtist.text = song.artistName;
+        avatarResult.sprite = song.avatar;
+
+        // ===== 🎯 SCORE =====
+        int currentScore = GameManager.Instance.GetScore();
+        score.text = $"{currentScore}";
+
+        // ===== 🏆 HIGH SCORE (THEO SONG) =====
+        highestScore.text = $"Highest Score: {song.highScore}";
+
+        int newRankIndex = UpdateRank(currentScore);
+
+        // 🔥 UPDATE RANK CHO SONG
+        UpdateSongRank(newRankIndex);
         // ===== ⭐ STAR =====
         int stars = GameManager.Instance.GetCurrentRunStars();
         total_stars_collected.text = $"Stars: {stars}";
 
         // ===== ⏱ TIME =====
         float time = GameManager.Instance.FinalPlayTime;
-
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
-
         durationTimePlay.text = $"Time: {minutes:00}:{seconds:00}";
 
-        // ===== 🎯 SCORE HIỆN TẠI =====
-        int currentScore = GameManager.Instance.GetScore();
-        score.text = $"{currentScore}";
+        // ===== 🔥 COMBO =====
+        maxCombo.text = $"{GameManager.Instance.GetMaxComboOverall()}";
 
-        // ===== 🏆 HIGH SCORE =====
-        int best = SaveDataManager.highestScore;
-        highestScore.text = $"Highest Score:  {best}";
-        UpdateRank(currentScore);
-        // ===== 🔥 MAX COMBO =====
-        int maxComboValue = GameManager.Instance.GetMaxComboOverall();
-        maxCombo.text = $"{maxComboValue}";
-        // ===== 🎯 EVALUATE COUNT =====
+        // ===== 🎯 EVALUATE =====
         perfectText.text = $" {GameManager.Instance.PerfectCount}";
         greatText.text = $" {GameManager.Instance.GreatCount}";
         goodText.text = $" {GameManager.Instance.GoodCount}";
         missText.text = $" {GameManager.Instance.MissCount}";
     }
-    void UpdateRank(int currentScore)
+    void UpdateSongRank(int newRankIndex)
     {
-        if (ChartManager.Instance == null) return;
+        if (PlaySessionManager.currentSong == null) return;
+        if (newRankIndex < 0) return;
+
+        var song = PlaySessionManager.currentSong;
+
+        // 🔥 FIX LOGIC
+        if (song.rankIndex == -1 || newRankIndex < song.rankIndex)
+        {
+            song.rankIndex = newRankIndex;
+            song.rank = rankSprites[newRankIndex];
+
+            Debug.Log($"🏆 New Best Rank: {newRankIndex}");
+        }
+    }
+    int UpdateRank(int currentScore)
+    {
+        if (ChartManager.Instance == null) return -1;
 
         int maxScore = ChartManager.Instance.MaxPerfectScore;
-
-        if (maxScore <= 0) return;
+        if (maxScore <= 0) return -1;
 
         float percent = (float)currentScore / maxScore * 100f;
 
@@ -87,6 +105,8 @@ public class ResultUI : MonoBehaviour
         {
             rankResultImage.sprite = rankSprites[index];
         }
+
+        return index; // 🔥 TRẢ VỀ
     }
     int GetRankIndex(float percent)
     {
@@ -107,5 +127,12 @@ public class ResultUI : MonoBehaviour
 
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
+    }
+    void OnNext()
+    {
+        Time.timeScale = 1f;
+        PlaySessionManager.Clear(); // optional (reset session)
+
+        SceneManager.LoadScene("ChooseSong");
     }
 }

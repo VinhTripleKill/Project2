@@ -209,11 +209,41 @@ public class GameManager : MonoBehaviour
     {
         return score;
     }
+    void UpdateSongStarData()
+    {
+        if (PlaySessionManager.currentSong == null) return;
+
+        int oldStars = PlaySessionManager.currentSong.starCollected;
+        int newStars = oldStars;
+
+        for (int i = 0; i < progressBar.GetCurrentStars().Length; i++)
+        {
+            if (progressBar.GetCurrentStars()[i])
+            {
+                newStars = Mathf.Max(newStars, i + 1);
+            }
+        }
+
+        PlaySessionManager.currentSong.starCollected = newStars;
+    }
+    void UpdateSongHighScore()
+    {
+        if (PlaySessionManager.currentSong == null) return;
+
+        int currentScore = score;
+
+        if (currentScore > PlaySessionManager.currentSong.highScore)
+        {
+            PlaySessionManager.currentSong.highScore = currentScore;
+        }
+    }
     public void TriggerGameOver()
     {
         if (IsGameOver) return;
 
         IsGameOver = true;
+        UpdateSongStarData();
+        UpdateSongHighScore();
         SaveDataManager.SaveStars(progressBar.GetCurrentStars());
         SaveDataManager.SaveScore(score);
 
@@ -230,6 +260,7 @@ public class GameManager : MonoBehaviour
     }
     public void OnSongFinished()
     {
+        UpdateSongStarData();
         SaveDataManager.SaveStars(progressBar.GetCurrentStars());
         FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
 
@@ -242,7 +273,7 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
-
+        UpdateSongHighScore();
         // 🔥 LÚC NÀY mới tính điểm & lưu
         SaveDataManager.SaveStars(progressBar.GetCurrentStars());
         SaveDataManager.SaveScore(score);
