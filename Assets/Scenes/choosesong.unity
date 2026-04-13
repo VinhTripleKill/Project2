@@ -1071,10 +1071,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SongListManager
   songs:
-  - {fileID: 11400000, guid: 7398bee58a7b4b04ca01183e61c80804, type: 2}
+  - {fileID: 11400000, guid: 3bb5f88710c5ef84b8b75b2f50433d1b, type: 2}
   - {fileID: 11400000, guid: fb2d162cf6f6ccd43a760801e73b9570, type: 2}
   - {fileID: 11400000, guid: 2c44c6e6c522f0642b004e75fe2ffa56, type: 2}
-  - {fileID: 11400000, guid: 8413c82a218563e44a1e82e6beec67f0, type: 2}
+  - {fileID: 11400000, guid: 3d4379418f808f141877c7968e0de047, type: 2}
+  - {fileID: 11400000, guid: 2ab0b2c2e3a439d44aa1d44b197c0739, type: 2}
+  - {fileID: 11400000, guid: 21db8ede8c40ce2499eb4d9dce81badb, type: 2}
   itemPrefab: {fileID: 2729580606991909275, guid: 8261cfe531cab9e43bdb66d8e1c650ae, type: 3}
   content: {fileID: 1727256509}
   resetButton: {fileID: 466247375}

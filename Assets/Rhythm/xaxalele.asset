@@ -12,9 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd4556d62e35b143b9d94e658121859, type: 3}
   m_Name: xaxalele
   m_EditorClassIdentifier: Assembly-CSharp::SongData
-  songName: "Xaleid\u25C6scopiX"
-  artist: Xi
-  cover: {fileID: -5183756314255143157, guid: b97be61790ccf2549a2c6274c01e9053, type: 3}
-  audio: {fileID: 8300000, guid: 830cc3e85a27ae548a03f7bb7622bdca, type: 3}
-  chart: {fileID: 4900000, guid: d2aca82960ededf46b9cb30ebaf67c27, type: 3}
-  video: {fileID: 32900000, guid: 5e168449877edf044b6f01f89e8ba89e, type: 3}
+  songName: XaleidscopiX
+  artistName: ikolio
+  avatar: {fileID: -5183756314255143157, guid: b97be61790ccf2549a2c6274c01e9053, type: 3}
+  chartData: {fileID: 4900000, guid: d2aca82960ededf46b9cb30ebaf67c27, type: 3}
+  star1: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star2: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star3: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  rank: {fileID: 0}
+  rankIndex: -1
+  starCollected: 0
+  audioClip: {fileID: 8300000, guid: 830cc3e85a27ae548a03f7bb7622bdca, type: 3}
+  difficulty: 2
+  videoClip: {fileID: 32900000, guid: 5e168449877edf044b6f01f89e8ba89e, type: 3}
+  duration: 0
+  highScore: 0

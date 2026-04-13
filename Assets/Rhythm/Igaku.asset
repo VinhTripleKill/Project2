@@ -13,8 +13,17 @@ MonoBehaviour:
   m_Name: Igaku
   m_EditorClassIdentifier: Assembly-CSharp::SongData
   songName: Igaku
-  artist: 'Sasuke Haraguchi '
-  cover: {fileID: -4272467683537037272, guid: f89b6e2df3bca7a4ab9e714020e951ae, type: 3}
-  audio: {fileID: 8300000, guid: 74a31e921fc412b458934763d23b23e3, type: 3}
-  chart: {fileID: 4900000, guid: 7df61769c1763b0479a0e90b4e373b4e, type: 3}
-  video: {fileID: 32900000, guid: 06cdb7df90635c84f9a729e809a2b0bc, type: 3}
+  artistName: teto
+  avatar: {fileID: -4272467683537037272, guid: f89b6e2df3bca7a4ab9e714020e951ae, type: 3}
+  chartData: {fileID: 4900000, guid: 7df61769c1763b0479a0e90b4e373b4e, type: 3}
+  star1: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star2: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  star3: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
+  rank: {fileID: 21300000, guid: 0412c8499e550bb41ae5be7bed1a4427, type: 3}
+  rankIndex: 6
+  starCollected: 0
+  audioClip: {fileID: 8300000, guid: 74a31e921fc412b458934763d23b23e3, type: 3}
+  difficulty: 2
+  videoClip: {fileID: 32900000, guid: 06cdb7df90635c84f9a729e809a2b0bc, type: 3}
+  duration: 0
+  highScore: 1103

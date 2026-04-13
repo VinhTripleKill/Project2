@@ -19,9 +19,11 @@ MonoBehaviour:
   star1: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
   star2: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
   star3: {fileID: 2065733144272106913, guid: 584b9b94868abc74cbfb606ca2d0a7b4, type: 3}
-  rank: {fileID: 21300000, guid: ec14238a377c32047b65bba5c8ead57b, type: 3}
+  rank: {fileID: 0}
+  rankIndex: -1
+  starCollected: 0
   audioClip: {fileID: 8300000, guid: 38e3ea40de05b8e41859ff4c1c4194ef, type: 3}
-  difficulty: 2
+  difficulty: 1
   videoClip: {fileID: 32900000, guid: a15b11a5041298f49a5f921fa03d98ca, type: 3}
   duration: 0
   highScore: 0

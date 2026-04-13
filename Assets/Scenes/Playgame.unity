@@ -7395,7 +7395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b1913f1d625fe409e66b7613ea3190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  playMode: 1
+  playMode: 0
   coolDownResumeText: {fileID: 1061158731}
   resumeCooldown: 3
   progressBar: {fileID: 169088737}
