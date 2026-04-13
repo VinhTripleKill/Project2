@@ -244,8 +244,10 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         UpdateSongStarData();
         UpdateSongHighScore();
-        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
-        SaveDataManager.SaveScore(score);
+        var song = PlaySessionManager.currentSong;
+
+        SaveDataManager.SaveScore(song.songName, score);
+        SaveDataManager.SaveStars(song.songName, progressBar.GetCurrentRunStarCount());
 
         // ⏱ lưu thời gian ngay lúc chết
         FinalPlayTime = (float)AudioManager.Instance.SongTimeDSP;
@@ -261,7 +263,9 @@ public class GameManager : MonoBehaviour
     public void OnSongFinished()
     {
         UpdateSongStarData();
-        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
+        var song = PlaySessionManager.currentSong;
+
+        SaveDataManager.SaveStars(song.songName, progressBar.GetCurrentRunStarCount());
         FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
 
         StartCoroutine(WaitForAllNotesThenShowResult());
@@ -275,9 +279,10 @@ public class GameManager : MonoBehaviour
         }
         UpdateSongHighScore();
         // 🔥 LÚC NÀY mới tính điểm & lưu
-        SaveDataManager.SaveStars(progressBar.GetCurrentStars());
-        SaveDataManager.SaveScore(score);
+        var song = PlaySessionManager.currentSong;
 
+        SaveDataManager.SaveScore(song.songName, score);
+        SaveDataManager.SaveStars(song.songName, progressBar.GetCurrentRunStarCount());
         FinalPlayTime = AudioManager.Instance.audioSource.clip.length;
         IsResultShowing = true;
         resultGame.SetActive(true);

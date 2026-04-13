@@ -15,7 +15,7 @@ public class SongItemUI : MonoBehaviour, IPointerClickHandler
     public Image star2;
     public Image star3;
     public Image rank;
-
+    [SerializeField] private Sprite defaultRankSprite;
     public TMP_Text songNameText;
     public TMP_Text artistNameText;
 
@@ -48,7 +48,7 @@ public class SongItemUI : MonoBehaviour, IPointerClickHandler
         star1.sprite = data.star1;
         star2.sprite = data.star2;
         star3.sprite = data.star3;
-        rank.sprite = data.rank;
+        rank.sprite = data.rank != null ? data.rank : defaultRankSprite;
 
         songNameText.text = data.songName;
         artistNameText.text = data.artistName;

@@ -86,7 +86,7 @@ public class ResultUI : MonoBehaviour
         {
             song.rankIndex = newRankIndex;
             song.rank = rankSprites[newRankIndex];
-
+            SaveDataManager.SaveRank(song.songName, newRankIndex);
             Debug.Log($"🏆 New Best Rank: {newRankIndex}");
         }
     }
