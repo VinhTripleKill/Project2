@@ -8,7 +8,7 @@ public class SongListManager : MonoBehaviour, IPointerClickHandler
     public SongData[] songs;
     public SongItemUI itemPrefab;
     public Transform content;
-
+    public Button returnButton;
     public Button resetButton;
     public SongDetailUI detailUI;
 
@@ -25,7 +25,8 @@ public class SongListManager : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         SaveDataManager.Load();
-
+        if (returnButton != null)
+            returnButton.onClick.AddListener(OnReturnToMenu);
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetData);
 
@@ -54,6 +55,10 @@ public class SongListManager : MonoBehaviour, IPointerClickHandler
             var item = Instantiate(itemPrefab, content);
             item.Setup(song, OnItemClicked);
         }
+    }
+    void OnReturnToMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MenuGame");
     }
     void OnResetData()
     {

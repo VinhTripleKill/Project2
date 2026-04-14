@@ -1091,6 +1091,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 21db8ede8c40ce2499eb4d9dce81badb, type: 2}
   itemPrefab: {fileID: 2729580606991909275, guid: 8261cfe531cab9e43bdb66d8e1c650ae, type: 3}
   content: {fileID: 1727256509}
+  returnButton: {fileID: 288815397}
   resetButton: {fileID: 466247375}
   detailUI: {fileID: 131849233}
   rankSprites:
