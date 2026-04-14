@@ -879,6 +879,7 @@ MonoBehaviour:
   star2: {fileID: 6933517590504742026}
   star3: {fileID: 9063329330416926108}
   rank: {fileID: 3808639391920233949}
+  defaultRankSprite: {fileID: 21300000, guid: 0412c8499e550bb41ae5be7bed1a4427, type: 3}
   songNameText: {fileID: 9122592351489963147}
   artistNameText: {fileID: 9210787942837499093}
   difficultyText: {fileID: 559957962055046612}

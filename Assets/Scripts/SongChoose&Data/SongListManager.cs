@@ -45,6 +45,11 @@ public class SongListManager : MonoBehaviour, IPointerClickHandler
                 song.rankIndex = rankIndex;
                 song.rank = GetRankSprite(rankIndex);
             }
+            else
+            {
+                song.rankIndex = -1;
+                song.rank = null;
+            }
 
             var item = Instantiate(itemPrefab, content);
             item.Setup(song, OnItemClicked);

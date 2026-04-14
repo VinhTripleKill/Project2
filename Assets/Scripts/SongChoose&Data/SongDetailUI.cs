@@ -34,8 +34,14 @@ public class SongDetailUI : MonoBehaviour
         star1.sprite = data.star1;
         star2.sprite = data.star2;
         star3.sprite = data.star3;
-        rank.sprite = data.rank;
+        bool hasRank = data.rankIndex != -1;
 
+        rank.gameObject.SetActive(hasRank);
+
+        if (hasRank && data.rank != null)
+        {
+            rank.sprite = data.rank;
+        }
         // copy alpha star
         star1.color = itemUI.star1.color;
         star2.color = itemUI.star2.color;

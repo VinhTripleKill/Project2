@@ -48,8 +48,14 @@ public class SongItemUI : MonoBehaviour, IPointerClickHandler
         star1.sprite = data.star1;
         star2.sprite = data.star2;
         star3.sprite = data.star3;
-        rank.sprite = data.rank != null ? data.rank : defaultRankSprite;
+        bool hasRank = data.rankIndex != -1;
 
+        rank.gameObject.SetActive(hasRank);
+
+        if (hasRank)
+        {
+            rank.sprite = data.rank;
+        }
         songNameText.text = data.songName;
         artistNameText.text = data.artistName;
 
